@@ -11,7 +11,7 @@ public class database_handle {
     private static final String PASSWORD = "Aa22540444";
 
     //assigne slot by GAzar
-    public static void assignSlot(String plateNumber) {
+    public static int assignSlot(String plateNumber) {
         int availableSlot =0;
 
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
@@ -25,19 +25,35 @@ public class database_handle {
                 if (resultSet.next()) {
                     availableSlot = resultSet.getInt("spot");
                 }
-                System.out.print(availableSlot);
+                return availableSlot;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            return 0;
         }
 
 
     }
 
+//assign slot to customer
+    public static String assignSlotToCustomer( int slot,String id){
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String insertQuery = "UPDATE customers set slot = ? where entry_id =?";
 
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setInt(1,slot);
+                preparedStatement.setString(2,id);
+
+                preparedStatement.executeUpdate();
+
+                return "slot is assigned";
+            }
+        } catch (SQLException e) {
+            return "slot didn't assign";
+        }
+    }
 
     // insert methods
-    public static void insertOperatorData(String name,String pass,int shift) {
+    public static String insertOperatorData(String name,String pass,int shift) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String insertQuery = "INSERT INTO operator (username, password,shift_time) VALUES (?, ?,?)";
 
@@ -47,10 +63,10 @@ public class database_handle {
                 preparedStatement.setInt(3,shift);
                 preparedStatement.executeUpdate();
 
-                System.out.println("Data inserted successfully.");
+                return "Data inserted successfully.";
             }
         } catch (SQLException e) {
-            System.out.println("Data couldn't be inserted.");
+            return "Data couldn't be inserted";
         }
     }
 
@@ -229,6 +245,7 @@ public class database_handle {
             System.out.println("Data couldn't be deleted.");
         }
     }
-    
+
+
 }
 

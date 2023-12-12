@@ -25,8 +25,11 @@ public class Operator {
         database_handle.insertCustomerData(entryID,carPlateNumber);
     }
 
-    public void assignedSlot(String carPlateNumber){
-        database_handle.assignSlot(carPlateNumber);
+    public String assignedSlot(String carPlateNumber){
+        this.carPlateNumber = carPlateNumber;
+      int slot =  database_handle.assignSlot(carPlateNumber);
+      return database_handle.assignSlotToCustomer(slot,entryID);
+
     }
 
     /*public String printEntryTicket(String platenumber) {
