@@ -23,18 +23,13 @@ public class Operator {
         entryID = carPlateNumber;
         //entryDateTime = LocalDateTime.now();
         database_handle.insertCustomerData(entryID,carPlateNumber);
-
-    }
-
-    public void recordEntryTime() {
-        entryDateTime = LocalDateTime.now();
     }
 
     public void assignedSlot(String carPlateNumber){
         database_handle.assignSlot(carPlateNumber);
     }
 
-    public void printEntryTicket(String platenumber) {
+    /*public String printEntryTicket(String platenumber) {
         this.carPlateNumber= platenumber;
         System.out.println("==== Entry Ticket ====");
         System.out.println("Entry ID: " + entryID);
@@ -42,7 +37,7 @@ public class Operator {
         System.out.println("Entry Time: " + entryDateTime);
         System.out.println("Slot Number: "+ availableSlot);
         System.out.println("=====================");
-    }
+    }*/
 
     public double calculateParkingDurationHours() {
         LocalDateTime exitTime = LocalDateTime.now();
@@ -54,9 +49,9 @@ public class Operator {
         double hours = calculateParkingDurationHours();
         return hours * parkingFeePerHour;
     }
-
+/*
     public void printExitTicket(String providedEntryID) {
-        /*
+        
         if (providedEntryID==entryID) {
             calculateParkingDurationHours();
             double parkingFee = calculateParkingFee();
@@ -70,15 +65,15 @@ public class Operator {
             System.out.println("=====================");
         } else {
             System.out.println("Invalid Entry ID. Please provide the correct entry ID.");
-        }*/
+        }
        // database_handle.printEntryTicket(providedEntryID);
     }
+*/
 
-
-/*     public String entryTicket(String plateNumber){
+     public String entryTicket(String plateNumber){
         this.carPlateNumber = plateNumber;
         return "Entry ID: "+entryID+", Entry DateTime: "+entryDateTime+"\nAvailable Slot: "+availableSlot+"\nPLate number: "+carPlateNumber;
-    } */
+    } 
 
     public static void displayFreeSpots(){
         database_handle.retrieveData("spots");
