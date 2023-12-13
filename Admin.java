@@ -1,6 +1,25 @@
 import java.util.*;
+abstract class AdminMethods{
+    public abstract void setUsername(String user);
+    public abstract void setPassword(String password);
+    public abstract String getUsername();
+    public abstract String getPassword();
+    public abstract String addSpots(int spotId);
+    public abstract String viewTotalSpots();
+    public abstract String addCustomer(String entry_id,String plate_number);
+    public abstract String addOperator(String name, String pass,int shift);
+    public abstract String updateUser(String id,String newID);
+    public abstract String updateOperatorName(String oldName,String newName);
+    public abstract String updateOperatorPass(String oldPass,String newPass);
+    public abstract String updatePayment(int shift, double payment);
+    public abstract String deleteCustomer(String entry_id);
+    public abstract String deleteOperator(String name);
+    public abstract String parkedCar();
 
-public class Admin {
+
+}
+public class Admin extends AdminMethods {
+
     private String Username;
     private String Password;
     //Constructor for logging into the system
@@ -59,50 +78,64 @@ public class Admin {
     }
 
     // Admin password getter
-    private String getPassword() {
+    public String getPassword() {
         return Password;
     }
 
     //Admin add spots to the parking area
-    public void addSpots(int spotId){
-        database_handle.insertSpot(spotId, "free");
+    public String addSpots(int spotId){
+
+        return database_handle.insertSpot(spotId, "free");
     }
 
     //Admin view total spots in the parking area
-    public void viewTotalSpots(){
-        database_handle.retrieveData("spots");
+    public String viewTotalSpots(){
+      return database_handle.retrieveData("spots");
+
     }
 
     // Admin add customer
-    public void addCustomer(String entry_id,String plate_number){
-        database_handle.insertCustomerData(entry_id,plate_number);
+    public String addCustomer(String entry_id,String plate_number){
+        return database_handle.insertCustomerData(entry_id,plate_number);
+
     }
     //admin add operator
-    public void addOperator(String name, String pass,int shift){
-        database_handle.insertOperatorData(name,pass,shift);
+    public String addOperator(String name, String pass,int shift){
+        return database_handle.insertOperatorData(name,pass,shift);
+
     }
     //admin update user_id
-    public void updateUser(int id,int newID){
-        database_handle.updateCustomerId(id,newID);
+    public String updateUser(String  id,String newID){
+       return database_handle.updateCustomerId(id,newID);
+
     }
     //admin update operator_name
-    public void updateOperatorName(String oldName,String newName){
-        database_handle.updateOperatorUser(oldName,newName);
+    public String updateOperatorName(String oldName,String newName){
+        return database_handle.updateOperatorUser(oldName,newName);
+
     }
     //admin update operator_password
-    public void updateOperatorPass(String oldPass,String newPass){
-        database_handle.updateOperatorPass(oldPass,newPass);
+    public String updateOperatorPass(String oldPass,String newPass){
+       return database_handle.updateOperatorPass(oldPass,newPass);
+
     }
     //admin update shiftPayment
-    public void updatePayment(int shift, double payment){
-        database_handle.updatePayment(shift,payment);
+    public String updatePayment(int shift, double payment){
+       return database_handle.updatePayment(shift,payment);
+
     }
     //admin delete customerData
-    public void deleteCustomer(int entry_id){
-        database_handle.deleteCustomerData(entry_id);
+    public String deleteCustomer(String entry_id){
+        return database_handle.deleteCustomerData(entry_id);
+
     }
     //admin delete OperatorData
-    public void deleteOperator(String name){
-        database_handle.deleteOperatorData(name);
+    public String deleteOperator(String name){
+       return database_handle.deleteOperatorData(name);
+
     }
+    public String parkedCar(){
+        return database_handle.retrieveData("customers");
+    }
+
 }

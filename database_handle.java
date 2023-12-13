@@ -6,12 +6,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.time.Duration;
-public class database_handle {
+public class database_handle{
+
     // JDBC URL, username, and password of SQL Server
     private static final String JDBC_URL = "jdbc:sqlserver://DESKTOP-FCEDQJG:1433;databaseName=parking_system;encrypt=false;trustServerCertificate=true";
     private static final String USER = "alialkady";
     private static final String PASSWORD = "Aa22540444";
-
     //assigne slot by GAzar
     public static int assignSlot(String plateNumber) {
         int availableSlot = 0;
@@ -123,6 +123,8 @@ public class database_handle {
 
     //retrieve method
     public static String retrieveData(String table) {
+        StringBuilder resultBuilder = new StringBuilder();
+
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String selectQuery = "SELECT * FROM " + table;
 
@@ -130,47 +132,53 @@ public class database_handle {
                 ResultSet resultSet = statement.executeQuery(selectQuery);
 
                 while (resultSet.next()) {
-                    if (table == "operator") {
+                    if (table.equals("operator")) {
                         String username = resultSet.getString("username");
                         String password = resultSet.getString("password");
                         int shift = resultSet.getInt("shift_time");
-                        return "username: " + username + '\n' + "password: " + password + '\n' + "shift: " + shift;
-                    } else if (table == "customers") {
-                        int entry_id = resultSet.getInt("entry_id");
-                        int plate_number = resultSet.getInt("plate_number");
-                        Timestamp timestamp = resultSet.getTimestamp("tranaction_date");
+                        resultBuilder.append("username: ").append(username).append('\n')
+                                .append("password: ").append(password).append('\n')
+                                .append("shift: ").append(shift).append('\n').append("====== \n");
+                    } else if (table.equals("customers")) {
+                        String entry_id = resultSet.getString("entry_id");
+                        String plate_number = resultSet.getString("plate_number");
+                        Timestamp timestamp = resultSet.getTimestamp("transaction_date");
                         int slot = resultSet.getInt("slot");
-                        double payment = resultSet.getDouble("payment");
-                        //.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+                        Timestamp exitTransaction = resultSet.getTimestamp("exit_transaction");
+                        double payment = resultSet.getDouble("customer_payment");
 
-                        //here's write transaction date but i have problem with the datatype
-                        return "entry id: " + entry_id + '\n' + "plate number: " + plate_number + '\n' + "tracation dateTime: '+timestamp" + "\n" + "slot:" + slot + "\n" + "payment: " + payment; // you have to print also the transaction date
-                    } else if (table == "spots") {
+                        resultBuilder.append("entry id: ").append(entry_id).append('\n')
+                                .append("plate number: ").append(plate_number).append('\n')
+                                .append("transaction dateTime: ").append(timestamp).append("\n")
+                                .append("slot: ").append(slot).append("\n")
+                                .append("Exit transaction dateTime: ").append(exitTransaction).append("\n")
+                                .append("payment: ").append(payment).append('\n').append("=====").append("\n");
+                    } else if (table.equals("spots")) {
                         int spots = resultSet.getInt("spot");
                         String spot_free = resultSet.getString("spot_free");
-                        return "spot number: " + spots + " is " + spot_free;
-                    } else if (table == "payment") {
+                        resultBuilder.append("spot number: ").append(spots).append(" is ").append(spot_free).append('\n');
+                    } else if (table.equals("payment")) {
                         int shift = resultSet.getInt("shift_order");
                         double shift_payment = resultSet.getDouble("shift_payment");
-                        return "shift " + shift + " shift_payment is " + shift_payment;
+                        resultBuilder.append("shift ").append(shift).append(" shift_payment is ").append(shift_payment).append('\n');
                     }
-
-
                 }
             }
         } catch (SQLException e) {
-            return "data couldn't be inserted";
+            return "data couldn't be retrieved";
         }
-        return table;
+
+        return resultBuilder.toString();
     }
 
-    public static String updateCustomerId(int entry_id, int new_id) {
+
+    public static String updateCustomerId(String entry_id, String  new_id) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String updateQuery = "UPDATE customers SET entry_id = ? WHERE entry_id = ?";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
-                preparedStatement.setInt(1, new_id);
-                preparedStatement.setInt(2, entry_id);
+                preparedStatement.setString(1, new_id);
+                preparedStatement.setString(2, entry_id);
                 preparedStatement.executeUpdate();
 
                 return "Data updated successfully.";
@@ -228,12 +236,12 @@ public class database_handle {
         }
     }
 
-    public static String deleteCustomerData(int id) {
+    public static String deleteCustomerData(String id) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String deleteQuery = "DELETE FROM customers WHERE entry_id = ?";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
-                preparedStatement.setInt(1, id);
+                preparedStatement.setString(1, id);
                 preparedStatement.executeUpdate();
 
                 return "Data deleted successfully.";
