@@ -159,8 +159,8 @@ public class database_handle{
                         resultBuilder.append("spot number: ").append(spots).append(" is ").append(spot_free).append('\n');
                     } else if (table.equals("payment")) {
                         int shift = resultSet.getInt("shift_order");
-                        double shift_payment = resultSet.getDouble("shift_payment");
-                        resultBuilder.append("shift ").append(shift).append(" shift_payment is ").append(shift_payment).append('\n');
+                        double shift_payment = resultSet.getDouble("shifts_payment");
+                        resultBuilder.append("shift ").append(shift).append(" has payment: ").append(shift_payment).append('\n').append("=====\n");
                     }
                 }
             }
@@ -295,6 +295,22 @@ public class database_handle{
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
                 preparedStatement.setDouble(1, fees);
                 preparedStatement.setString(2, id);
+                preparedStatement.executeUpdate();
+
+                return "Data inserted successfully.";
+            }
+        } catch (SQLException e) {
+            return "Data couldn't be inserted.";
+        }
+    }
+
+    public static String setFeesIntoPayments(int shift, double fees){
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String insertQuery = "update payment set shift_payment += ? where shift_order = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setDouble(1, fees);
+                preparedStatement.setInt(2, shift);
                 preparedStatement.executeUpdate();
 
                 return "Data inserted successfully.";

@@ -15,6 +15,7 @@ abstract class AdminMethods{
     public abstract String deleteCustomer(String entry_id);
     public abstract String deleteOperator(String name);
     public abstract String parkedCar();
+    public abstract String carReports();
 
 
 }
@@ -136,6 +137,10 @@ public class Admin extends AdminMethods {
     }
     public String parkedCar(){
         return database_handle.retrieveData("customers");
+    }
+
+    public String carReports(){
+        return database_handle.retrieveData("payment");
     }
 
 }
