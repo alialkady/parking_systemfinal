@@ -120,16 +120,21 @@ public class file {
     }
     public static void appendFile(String name, String infoToAppend) {
         try {
-            // Open the file in append mode
-            FileWriter writer = new FileWriter(name + ".txt", true);
+            // Check if the data already exists in the file
+            if (!dataExists(name, infoToAppend)) {
+                // Open the file in append mode
+                FileWriter writer = new FileWriter(name + ".txt", true);
 
-            // Append the provided information to the file
-            writer.write("\n" + infoToAppend);
+                // Append the provided information to the file
+                writer.write("\n" + infoToAppend);
 
-            // Close the file
-            writer.close();
+                // Close the file
+                writer.close();
 
-            System.out.println("Information appended successfully.");
+                System.out.println("Information appended successfully.");
+            } else {
+                System.out.println("Data already exists in the file. No changes made.");
+            }
 
         } catch (IOException e) {
             System.out.println("An error occurred.");
@@ -205,5 +210,109 @@ public class file {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+    }
+
+    public static void searchInFile(String name, String searchString) {
+        try {
+            File file = new File(name + ".txt");
+            Scanner scanner = new Scanner(file);
+
+            boolean found = false;
+            int lineNumber = 0;
+
+            while (scanner.hasNextLine()) {
+                lineNumber++;
+                String line = scanner.nextLine();
+
+                // Check if the line contains the search string
+                if (line.contains(searchString)) {
+                    found = true;
+                    System.out.println("Found at line " + lineNumber + ": " + line);
+                }
+            }
+
+            scanner.close();
+
+            if (!found) {
+                System.out.println("Search string not found in the file.");
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteSpecificLine(String name, String lineToDelete) {
+        try {
+            // Create obj with the file name
+            File myObj = new File(name + ".txt");
+
+            // Create a temporary file to store the updated content
+            File tempFile = new File(name + "_temp.txt");
+            FileWriter tempWriter = new FileWriter(tempFile);
+
+            boolean found = false;
+
+            // Read the existing content of the file
+            try (Scanner myReader = new Scanner(myObj)) {
+                // Iterate over the lines and update the list
+                while (myReader.hasNextLine()) {
+                    String currentLine = myReader.nextLine();
+
+                    // Check if the current line contains the content to be deleted
+                    if (currentLine.contains(lineToDelete)) {
+                        found = true;
+
+                        // Skip the current line and the next line
+                        if (myReader.hasNextLine()) {
+                            myReader.nextLine(); // Move to the next line
+                        }
+                    } else {
+                        // Write the current line to the temporary file
+                        tempWriter.write(currentLine + System.getProperty("line.separator"));
+                    }
+                }
+            }
+
+            tempWriter.close();
+
+            // Replace the original file with the temporary file
+            tempFile.renameTo(new File(name + ".txt"));
+
+            if (found) {
+                System.out.println("Specific line and the next line deleted successfully.");
+            } else {
+                System.out.println("Specified content not found in the file. No changes made.");
+            }
+
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean dataExists(String name, String infoToAppend) {
+        try {
+            File file = new File(name + ".txt");
+            Scanner scanner = new Scanner(file);
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+
+                // Check if the line contains the provided information
+                if (line.equals(infoToAppend)) {
+                    scanner.close();
+                    return true;
+                }
+            }
+
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred while checking data existence.");
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
