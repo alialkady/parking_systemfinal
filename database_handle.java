@@ -310,7 +310,37 @@ public class database_handle {
             return "Data couldn't be inserted.";
         }
     }
-    
+    public static String getCustomerData(String id) {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String selectQuery = "SELECT * FROM customers WHERE entry_id = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                preparedStatement.setString(1, id);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    String ID = resultSet.getString("entry_id");
+                    String plate_number = resultSet.getString("plate_number");
+                    Timestamp transaction_date = resultSet.getTimestamp("transaction_date");
+                    int slot = resultSet.getInt("slot");
+                    Timestamp exitTransactionDate = resultSet.getTimestamp("exit_transaction");
+                    double payment = resultSet.getDouble("customer_payment");
+
+                    return "entry_id: "+ID+"\n PlateNumber "+plate_number+"\n transactionDate: "+transaction_date+"\nSlot: "+slot+"\n exitDate: "+ exitTransactionDate+"\n Payment: "+payment;
+                } else {
+                    // Handle the case where no result is found
+                    return "No data found for entry_id: " + id;
+                }
+            }
+        } catch (SQLException e) {
+            // Handle SQL exceptions
+
+            return "Data couldn't be retrieved.";
+        }
+    }
+
+
 }
 
 
