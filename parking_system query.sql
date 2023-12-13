@@ -11,13 +11,14 @@ drop table operator
 GO
 create table customers (
 entry_id varchar(10) unique,
-plate_number varchar(10) unique, --maybe need to use unique constraint
+plate_number varchar(10) unique , --maybe need to use unique constraint
 transaction_date datetime,
-slot int,
+slot int default 0,
 exit_transaction datetime,
-customer_payment decimal
+customer_payment decimal default 0.0
 
 )
+insert into customers(entry_id,plate_number) values('123','abc')
 drop table customers
 Go
 create table spots(
