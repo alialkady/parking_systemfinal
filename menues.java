@@ -63,9 +63,9 @@ public class menues{
                 String plateNumber = scanner.nextLine();
                 operator.generateEntryID(plateNumber);
                 operator.assignedSlot(plateNumber);
-                operator.recordEntryTime();
+                //operator.recordEntryTime();
                 operator.assignedSlot(plateNumber);
-                operator.printEntryTicket(plateNumber);
+                operator.entryTicket(plateNumber);
 
                 //customer.setVehicleNumber(plateNumber);
                 //customer.park(1);

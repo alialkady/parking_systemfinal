@@ -55,8 +55,9 @@ public class Operator {
         this.entryID=id;
         double hours = calculateParkingDurationHours(entryID);
         return hours * parkingFeePerHour;
-        
+
     }
+
 /*
     public void printExitTicket(String providedEntryID) {
         
