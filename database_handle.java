@@ -280,7 +280,37 @@ public class database_handle {
             return Timestamp.valueOf(LocalDateTime.now());
         }
     }
+    public static String setFees(String id,double fees){
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String insertQuery = "update customers set customer_payment = ? where entry_id = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setDouble(1, fees);
+                preparedStatement.setString(2, id);
+                preparedStatement.executeUpdate();
+
+                return "Data inserted successfully.";
             }
+        } catch (SQLException e) {
+            return "Data couldn't be inserted.";
+        }
+    }
+    public static String setExitDate(String id,Timestamp date){
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String insertQuery = "update customers set exit_transaction = ? where entry_id = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setTimestamp(1, date);
+                preparedStatement.setString(2, id);
+                preparedStatement.executeUpdate();
+
+                return "Data inserted successfully.";
+            }
+        } catch (SQLException e) {
+            return "Data couldn't be inserted.";
+        }
+    }
+}
 
 
 
