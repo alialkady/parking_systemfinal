@@ -89,18 +89,19 @@ public class Operator {
         this.carPlateNumber = plateNumber;
         return "Entry ID: "+entryID+", Entry DateTime: "+entryDateTime+"\nAvailable Slot: "+availableSlot+"\nPLate number: "+carPlateNumber;
     } 
-    public String printExitTicket(String providedEntryID){
-        if (providedEntryID==entryID) {
+   public static String printExitTicket(String providedEntryID){
+        return database_handle.getCustomerData(providedEntryID);
+        /*if (providedEntryID==entryID) {
             calculateParkingDurationHours(providedEntryID);
             double parkingFee = (double)calculateParkingFee(providedEntryID);
             String output = "{\n\"Entry ID\": \""+entryID+"\",\n\"Car Plate Number\": \""+carPlateNumber+"\",\n\"Duration Hours\": \"" + calculateParkingDurationHours(entryID)+ "\",\n\"Parking Fee\": \"$" + parkingFee + "\"}";
-            /*database_handle.updateStatus(entryID,"Exited");
-            database_handle.setPaymentStatus(entryID,"Unpaid");*/
+            //database_handle.updateStatus(entryID,"Exited");
+            //database_handle.setPaymentStatus(entryID,"Unpaid");
             return output;
             } else {
                 return "Invalid Entry ID.";
                 }
-                //return database_handle.printExitTicket(providedEntryID);
+                //return database_handle.printExitTicket(providedEntryID);*/
                 }
 
 public static String displayFreeSpots(){
