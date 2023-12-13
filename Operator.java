@@ -18,20 +18,21 @@ public class Operator {
     private double parkingFeePerHour = 2.5; // Assuming a fixed fee per hour
 
 
-    public void generateEntryID(String plateNumber) {
+    public String generateEntryID(String plateNumber) {
         // ID generation logic as before
         //entryID = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + (int) (Math.random() * 1000);
         //entryID = (int)Math.random() * 100000;
         this.carPlateNumber=plateNumber;
         entryID = carPlateNumber;
         //entryDateTime = LocalDateTime.now();
-        database_handle.insertCustomerData(entryID,carPlateNumber);
+        return database_handle.insertCustomerData(entryID,carPlateNumber);
     }
 
     public String assignedSlot(String carPlateNumber){
         this.carPlateNumber = carPlateNumber;
       int slot =  database_handle.assignSlot(carPlateNumber);
-      return database_handle.assignSlotToCustomer(slot,entryID);
+      return database_handle.assignSlotToCustomer(slot,carPlateNumber);
+//
 
     }
 
@@ -87,9 +88,10 @@ public class Operator {
 
      public String entryTicket(String plateNumber){
         this.carPlateNumber = plateNumber;
-        return "Entry ID: "+entryID+", Entry DateTime: "+entryDateTime+"\nAvailable Slot: "+availableSlot+"\nPLate number: "+carPlateNumber;
+        return database_handle.setEntryTicket(carPlateNumber);
     } 
    public static String printExitTicket(String providedEntryID){
+
         return database_handle.getCustomerData(providedEntryID);
         /*if (providedEntryID==entryID) {
             calculateParkingDurationHours(providedEntryID);

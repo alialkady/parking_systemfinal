@@ -6,12 +6,13 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.time.Duration;
-public class database_handle{
+public class database_handle {
 
     // JDBC URL, username, and password of SQL Server
     private static final String JDBC_URL = "jdbc:sqlserver://DESKTOP-FCEDQJG:1433;databaseName=parking_system;encrypt=false;trustServerCertificate=true";
     private static final String USER = "alialkady";
     private static final String PASSWORD = "Aa22540444";
+
     //assigne slot by GAzar
     public static int assignSlot(String plateNumber) {
         int availableSlot = 0;
@@ -39,11 +40,12 @@ public class database_handle{
     //assign slot to customer
     public static String assignSlotToCustomer(int slot, String id) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
-            String insertQuery = "UPDATE customers set slot = ? where entry_id =?";
+            String insertQuery = "UPDATE customers set slot = ? where entry_id =?  Update spots set spot_free = 'notFree' where spot= ? ";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
                 preparedStatement.setInt(1, slot);
                 preparedStatement.setString(2, id);
+                preparedStatement.setInt(3, slot);
 
                 preparedStatement.executeUpdate();
 
@@ -172,7 +174,7 @@ public class database_handle{
     }
 
 
-    public static String updateCustomerId(String entry_id, String  new_id) {
+    public static String updateCustomerId(String entry_id, String new_id) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String updateQuery = "UPDATE customers SET entry_id = ? WHERE entry_id = ?";
 
@@ -265,6 +267,7 @@ public class database_handle{
             return "Data couldn't be deleted.";
         }
     }
+
     public static Timestamp getDate(String id) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String selectQuery = "SELECT transaction_date FROM customers WHERE entry_id = ?";
@@ -288,7 +291,8 @@ public class database_handle{
             return Timestamp.valueOf(LocalDateTime.now());
         }
     }
-    public static String setFees(String id,double fees){
+
+    public static String setFees(String id, double fees) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String insertQuery = "update customers set customer_payment = ? where entry_id = ?";
 
@@ -304,7 +308,7 @@ public class database_handle{
         }
     }
 
-    public static String setFeesIntoPayments(int shift, double fees){
+    public static String setFeesIntoPayments(int shift, double fees) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String insertQuery = "update payment set shift_payment += ? where shift_order = ?";
 
@@ -319,7 +323,8 @@ public class database_handle{
             return "Data couldn't be inserted.";
         }
     }
-    public static String setExitDate(String id,Timestamp date){
+
+    public static String setExitDate(String id, Timestamp date) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String insertQuery = "update customers set exit_transaction = ? where entry_id = ?";
 
@@ -334,6 +339,7 @@ public class database_handle{
             return "Data couldn't be inserted.";
         }
     }
+
     public static String getCustomerData(String id) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String selectQuery = "SELECT * FROM customers WHERE entry_id = ?";
@@ -351,7 +357,7 @@ public class database_handle{
                     Timestamp exitTransactionDate = resultSet.getTimestamp("exit_transaction");
                     double payment = resultSet.getDouble("customer_payment");
 
-                    return "entry_id: "+ID+"\n PlateNumber "+plate_number+"\n transactionDate: "+transaction_date+"\nSlot: "+slot+"\n exitDate: "+ exitTransactionDate+"\n Payment: "+payment;
+                    return "entry_id: " + ID + "\n PlateNumber " + plate_number + "\n transactionDate: " + transaction_date + "\nSlot: " + slot + "\n exitDate: " + exitTransactionDate + "\n Payment: " + payment;
                 } else {
                     // Handle the case where no result is found
                     return "No data found for entry_id: " + id;
@@ -362,9 +368,39 @@ public class database_handle{
 
             return "Data couldn't be retrieved.";
         }
+
     }
 
+    public static String setEntryTicket(String id) {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String selectQuery = "SELECT entry_id,transaction_date,slot,plate_number FROM customers WHERE entry_id = ?";
 
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                preparedStatement.setString(1, id);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    String ID = resultSet.getString("entry_id");
+                    String plate_number = resultSet.getString("plate_number");
+                    Timestamp transaction_date = resultSet.getTimestamp("transaction_date");
+                    int slot = resultSet.getInt("slot");
+
+
+                    return "entry_id: " + ID + "\n transactionDate: " + transaction_date + "\nSlot: " + slot + "\n PlateNumber " + plate_number + "\n=====";
+                } else {
+                    // Handle the case where no result is found
+                    return "No data found for entry_id: " + id;
+                }
+            }
+        } catch (SQLException e) {
+            // Handle SQL exceptions
+
+            return "Data couldn't be retrieved.";
+        }
+
+
+    }
 }
 
 

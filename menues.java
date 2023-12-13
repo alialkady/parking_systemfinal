@@ -1,3 +1,4 @@
+import java.util.Scanner;
 public class menues{
 
     public static void homeMenue(){
@@ -53,11 +54,13 @@ public class menues{
             case 1:
                 System.out.print("Enter vehicle plate number: ");
                 String plateNumber = scanner.nextLine();
-                operator.generateEntryID(plateNumber);
-                operator.assignedSlot(plateNumber);
+                System.out.println(operator.generateEntryID(plateNumber));
+               System.out.println(operator.assignedSlot(plateNumber));
+                System.out.println(operator.entryTicket(plateNumber));
+
                 //operator.recordEntryTime();
                 //operator.assignedSlot(plateNumber);
-                System.out.println(operator.entryTicket(plateNumber)); 
+               // System.out.println(database_handle.getCustomerData(plateNumber));
 
                 //customer.setVehicleNumber(plateNumber);
                 //customer.park(1);
@@ -65,6 +68,8 @@ public class menues{
             case 2:
                 System.out.print("Enter entry ID: ");
                 String providedEntryID = scanner.nextLine();
+                System.out.println(operator.calculateParkingDurationHours(providedEntryID));
+                System.out.println(operator.calculateParkingFee(providedEntryID));
                 System.out.println(operator.printExitTicket(providedEntryID)); ;
                 //customer.printExitTicket(providedEntryID);
                 break;
