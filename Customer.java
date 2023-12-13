@@ -1,22 +1,40 @@
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
+
+
+
+
 public class Customer {
 
     // JDBC URL, username, and password of SQL Server
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/CUSTOMER?useSSL=false";
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/customers?useSSL=false";
     private static final String USER = "ali";
     private static final String PASSWORD = "123";
 
-    public static void main(String[] args) 
-    {
+    public static class CustomerData {
+        int entryid;
+        String plateNum;
+        Timestamp transactionDue;
+        int slotNum;
+    
+        public CustomerData() {
+            this.entryid = 0;
+            this.plateNum = "AA";
+            this.slotNum = 0;
+            this.transactionDue = Timestamp.valueOf(LocalDateTime.now());
+        }
+    }
+    
+    public static void main(String[] args) {
         Customer c1 = new Customer();
+        CustomerData CXD = new CustomerData();
         
         System.out.println("Hello world!");
         
         retrieveData();
-        
-        c1.printEntryTicket(59606, 3454);
+        // c1.GetTicketData(0, 0)
+        c1.printEntryTicket(CXD);
         
         System.out.println(generateEntryid());
     }
@@ -25,11 +43,10 @@ public class Customer {
     {
         Random rand = new Random();
         int randomNum = rand.nextInt(10000, 99999);
-        //database_handle.insertCustomerData(randomNum,"aht");
         return(randomNum);
     }
 
-    private static void retrieveData()
+    private static void retrieveData() //testing function
     {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD))
         {
@@ -58,36 +75,36 @@ public class Customer {
         
     }
 
-    public static void insertTicket(String plate_number)
+    public static int insertTicket(String plate_number, int slotNum)
     {
         
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD))
         {
-            String insertQuery = "INSERT INTO ticket (ENTRYID, PLATENO, TRANSDUE) VALUES (?, ?,?)";
+            String insertQuery = "INSERT INTO ticket (entry_id, plate_number, transaction_date, slot) VALUES (?, ?,?, ?)";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery))
             {
                 preparedStatement.setInt(1,generateEntryid());
                 preparedStatement.setString(2,plate_number);
                 preparedStatement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+                preparedStatement.setInt(4,slotNum);
                 preparedStatement.executeUpdate();
-
-                System.out.println("Ticket inserted successfully.");
+                return (0); //success insertion
             }
         }
         catch (SQLException e)
         {
-            System.err.println(e);
-            System.out.println("Ticket couldn't be inserted.");
+            return (1); //error in insertion
         }
 
     }
 
-    public void printEntryTicket(int EntryID, int slotnumber)
+    public CustomerData GetTicketData(int EntryID, int slotnumber)
     {
+        CustomerData CXD = new CustomerData();
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD))
-        {
-            String printingQuery = "SELECT * FROM ticket WHERE ENTRYID = ?";
+        { 
+            String printingQuery = "SELECT * FROM customer WHERE entry_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(printingQuery))
             {
                 preparedStatement.setInt(1, EntryID);
@@ -97,29 +114,41 @@ public class Customer {
                 { // resultSet is empty, this throws an exception
                     int id = resultSet.getInt("entryid");
                     String plateno = resultSet.getString("plateno");
-
                     Timestamp Transdue = resultSet.getTimestamp("transdue");
-                    System.out.println("==== Entry Ticket ====");
-                    System.err.println("Welcome Dear Customer");
-                    System.out.println("Entry ID: " + id);
-                    System.out.println("Vehicle Number: " + plateno);
-                    System.out.println("Entry Time: " + Transdue);
-                    System.out.println("Slot Number: "+ slotnumber);
-                    System.out.println("=====================");
+                    
+                    CXD.entryid = id;
+                    CXD.plateNum = plateno;
+                    CXD.transactionDue = Transdue;
+                    CXD.slotNum = slotnumber;
+
+                    return CXD;
                 } 
                 else 
                 {
-                        System.out.println("No result found");
+                    CXD.entryid = -1; //data not found matching this id
+                    return (CXD);
                 }
             }
             catch (SQLException e)
             {
-                System.out.println(e);
+                CXD.entryid = -2; //error in execution
+                return (CXD);
             }
         }
         catch (SQLException e) 
         {
-            e.printStackTrace();
+            CXD.entryid = -3;
+            return (CXD); //sql error
         }
+    }
+    public void printEntryTicket(CustomerData CXD)
+    {
+    System.out.println("==== Entry Ticket ====");
+    System.out.println("Welcome Dear Customer");
+    System.out.println("Entry ID: " + CXD.entryid);
+    System.out.println("Vehicle Number: " + CXD.plateNum);
+    System.out.println("Entry Time: " + CXD.transactionDue);
+    System.out.println("Slot Number: "+ CXD.slotNum);
+    System.out.println("=====================");
     }
 }
