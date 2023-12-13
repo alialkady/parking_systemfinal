@@ -3,6 +3,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.time.Duration;
+import java.util.UUID;
 
 
 
@@ -19,21 +20,22 @@ public class Operator {
 
 
     public String generateEntryID(String plateNumber) {
-        // ID generation logic as before
-        //entryID = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + (int) (Math.random() * 1000);
-        //entryID = (int)Math.random() * 100000;
-        this.carPlateNumber=plateNumber;
-        entryID = carPlateNumber;
-        //entryDateTime = LocalDateTime.now();
-        return database_handle.insertCustomerData(entryID,carPlateNumber);
+       UUID uuid = UUID.randomUUID();
+        entryID = String.valueOf((int) (Math.random() * 100001));
+        this.carPlateNumber = plateNumber;
+
+        return database_handle.insertCustomerData(entryID, carPlateNumber);
     }
 
-    public String assignedSlot(String carPlateNumber){
+    public int assignedSlot(String carPlateNumber){
         this.carPlateNumber = carPlateNumber;
-      int slot =  database_handle.assignSlot(carPlateNumber);
-      return database_handle.assignSlotToCustomer(slot,carPlateNumber);
-//
+      int slot =  database_handle.assignSlot(entryID);
+       database_handle.assignSlotToCustomer(slot,entryID);
+        return slot;
 
+    }
+    public String freeSpot(){
+        return database_handle.spotFree(assignedSlot(this.carPlateNumber));
     }
 
     /*public String printEntryTicket(String platenumber) {
@@ -88,7 +90,7 @@ public class Operator {
 
      public String entryTicket(String plateNumber){
         this.carPlateNumber = plateNumber;
-        return database_handle.setEntryTicket(carPlateNumber);
+        return database_handle.setEntryTicket(entryID);
     } 
    public static String printExitTicket(String providedEntryID){
 
