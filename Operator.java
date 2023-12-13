@@ -77,6 +77,19 @@ public class Operator {
         this.carPlateNumber = plateNumber;
         return "Entry ID: "+entryID+", Entry DateTime: "+entryDateTime+"\nAvailable Slot: "+availableSlot+"\nPLate number: "+carPlateNumber;
     } 
+    public String printExitTicket(String providedEntryID){
+        if (providedEntryID==entryID) {
+            calculateParkingDurationHours();
+            double parkingFee = calculateParkingFee(); 
+            String output = "{\n\"Entry ID\": \""+entryID+"\",\n\"Car Plate Number\": \""+carPlateNumber+"\",\n\"Duration Hours\": \"" + calculateParkingDurationHours()+ "\",\n\"Parking Fee\": \"$" + parkingFee + "\"}";
+            /*database_handle.updateStatus(entryID,"Exited");
+            database_handle.setPaymentStatus(entryID,"Unpaid");*/
+            return output;
+            } else {
+                return "Invalid Entry ID.";
+                }
+                //return database_handle.printExitTicket(providedEntryID);
+                }
 
     public static void displayFreeSpots(){
         database_handle.retrieveData("spots");
