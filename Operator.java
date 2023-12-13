@@ -1,7 +1,9 @@
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.security.Timestamp;
 import java.time.Duration;
+
 
 
 /**
@@ -48,15 +50,19 @@ public class Operator {
         entryDateTime = database_handle.getDate(id).toLocalDateTime();
         LocalDateTime exitTime = LocalDateTime.now();
         Duration duration = Duration.between(entryDateTime, exitTime);
+        database_handle.setExitDate(entryID, Timestamp.valueOf(exitTime));
         return duration.getSeconds() / 3600.0;
     }
 
     public double calculateParkingFee(String id) {
         this.entryID=id;
         double hours = calculateParkingDurationHours(entryID);
-        return hours * parkingFeePerHour;
+        double fees = hours* parkingFeePerHour;
+        System.out.println(database_handle.setFees(entryID,fees));
+        return fees;
 
     }
+
 
 /*
     public void printExitTicket(String providedEntryID) {
@@ -86,7 +92,7 @@ public class Operator {
     public String printExitTicket(String providedEntryID){
         if (providedEntryID==entryID) {
             calculateParkingDurationHours(providedEntryID);
-            double parkingFee = calculateParkingFee(providedEntryID); 
+            double parkingFee = (double)calculateParkingFee(providedEntryID);
             String output = "{\n\"Entry ID\": \""+entryID+"\",\n\"Car Plate Number\": \""+carPlateNumber+"\",\n\"Duration Hours\": \"" + calculateParkingDurationHours(entryID)+ "\",\n\"Parking Fee\": \"$" + parkingFee + "\"}";
             /*database_handle.updateStatus(entryID,"Exited");
             database_handle.setPaymentStatus(entryID,"Unpaid");*/

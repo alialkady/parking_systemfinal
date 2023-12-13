@@ -310,6 +310,7 @@ public class database_handle {
             return "Data couldn't be inserted.";
         }
     }
+    
 }
 
 
