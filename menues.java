@@ -1,7 +1,3 @@
-import java.util.Scanner;
-import java.util.*;
-
-
 public class menues{
 
     public static void homeMenue(){
@@ -10,10 +6,9 @@ public class menues{
         while (isRunning) {
             System.out.println("===== Parking System Menu =====");
             System.out.println("1. Customer");
-            System.out.println("2. Operator in Entry Station");
-            System.out.println("3. Operator in Exit Station");
-            System.out.println("4. Admin");
-            System.out.println("5. Exit");
+            System.out.println("2. Operator");
+            System.out.println("3. Admin");
+            System.out.println("4. Exit");
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
@@ -22,19 +17,16 @@ public class menues{
                     customerMenu();
                     break;
                 case 2:
-                    entryStationOperatorMenu();
+                        OperatorMenu();
                     break;
                 case 3:
-                    exitStationOperatorMenu();
-                    break;
-                case 4:
                     if (adminLogin()) {
                         adminMenu();
                     } else {
                         System.out.println("Admin login failed. Access denied.");
                     }
                     break;
-                case 5:
+                case 4:
                     System.out.println("Exiting the Parking System. Goodbye!");
                     isRunning = false;
                     break;
@@ -64,8 +56,8 @@ public class menues{
                 operator.generateEntryID(plateNumber);
                 operator.assignedSlot(plateNumber);
                 //operator.recordEntryTime();
-                operator.assignedSlot(plateNumber);
-                operator.entryTicket(plateNumber);
+                //operator.assignedSlot(plateNumber);
+                System.out.println(operator.entryTicket(plateNumber)); 
 
                 //customer.setVehicleNumber(plateNumber);
                 //customer.park(1);
@@ -73,7 +65,7 @@ public class menues{
             case 2:
                 System.out.print("Enter entry ID: ");
                 String providedEntryID = scanner.nextLine();
-                operator.printExitTicket(providedEntryID);
+                System.out.println(operator.printExitTicket(providedEntryID)); ;
                 //customer.printExitTicket(providedEntryID);
                 break;
             case 3:
@@ -83,7 +75,7 @@ public class menues{
                 break;
         }
     }
-    public static void entryStationOperatorMenu() {
+    public static void OperatorMenu() {
         Operator entryOperator = new Operator();
         Scanner scanner = new Scanner(System.in);
         boolean backToMain = false;
@@ -125,10 +117,10 @@ public class menues{
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1:
-                    Operator.displayFreeSpots();
+                    System.out.println(Operator.displayFreeSpots());
                     break;
                 case 2:
-                    Operator.displayFreeSpots();
+                    System.out.println(Operator.displayFreeSpots());
                     break;
                 case 3:
                     backToLogin = true;
@@ -138,12 +130,6 @@ public class menues{
                     break;
             }
         }
-    }
-
-    public static void exitStationOperatorMenu() {
-        // Implement exit station operator menu logic
-        System.out.println("Operator in Exit Station Menu");
-        // Add options for exit station operators
     }
 
     public static boolean adminLogin() {
