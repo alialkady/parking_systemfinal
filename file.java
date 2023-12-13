@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.io.FileWriter;
 import java.util.*;
 public class file {
-
+    public static boolean admincheck;
     //Create file
     public static void createFile(String name) {
         try {
@@ -49,11 +49,20 @@ public class file {
         }
     }
 
-    public static void adminCheck(String name, String user, String pass){
+    public static boolean adminCheck(/*String name, String user, String pass*/){
+        // creating two strings to hold the entered login info
+        String user ="";
+        String pass ="";
+        //Scanning the login info
+        Scanner adminCheckScan = new Scanner(System.in);
+        System.out.print("Username: ");
+        user += adminCheckScan.nextLine();
+        System.out.print("Password: ");
+        pass += adminCheckScan.nextLine();
         try {
             int singleLoginCheck = 0;
             // Create obj with the file name
-            File myObj = new File(name + ".txt");
+            File myObj = new File("Admin.txt");
             Scanner myReader = new Scanner(myObj);
 
             // Loop through lines
@@ -66,7 +75,8 @@ public class file {
 
                         if (nextLine.equals(pass)){
                             singleLoginCheck++;
-                            System.out.println("Welcome Back!");
+                            admincheck = true;
+                            //return true;
                         }
                     }
                 }
@@ -74,7 +84,8 @@ public class file {
             }
             // message to the admin if any entered info is wrong
             if (singleLoginCheck == 0 || singleLoginCheck == 1)
-                System.out.println("Wrong Username or Password");
+                admincheck = false;
+                //return false;
 
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -83,6 +94,9 @@ public class file {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+       // return check;
+        //return adminCheck(String name, String user, String pass);
+        return admincheck;
     }
 
 

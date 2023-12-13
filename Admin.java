@@ -1,7 +1,7 @@
 import java.util.*;
 abstract class AdminMethods{
-    public abstract void setUsername(String user);
-    public abstract void setPassword(String password);
+    public abstract void setUsernameAndPass();
+    //public abstract void setPassword(String password);
     public abstract String getUsername();
     public abstract String getPassword();
     public abstract String addSpots(int spotId);
@@ -24,7 +24,7 @@ public class Admin extends AdminMethods {
     private String Username;
     private String Password;
     //Constructor for logging into the system
-    public Admin(){
+    /*public Admin(){
         // creating two strings to hold the entered login info
         String user ="";
         String pass ="";
@@ -36,6 +36,8 @@ public class Admin extends AdminMethods {
         pass += adminCheckScan.nextLine();
         //passing login info to the login check method
         file.adminCheck("Admin", user, pass);
+    }*/
+    public Admin(){
     }
 
     // Constructor for add or signing up a new admin to the system
@@ -45,11 +47,13 @@ public class Admin extends AdminMethods {
         // Add new admin's info to the admins file
         file.appendFile("Admin", Username);
         file.appendFile("Admin", Password);
+
     }
 
     // Admin username setter
-    public void setUsername(String user) {
-        Username = user;
+    public void setUsernameAndPass(/*String user, String password*/) {
+        //Username = user;
+        //Password = password;
         Scanner userInputScanner = new Scanner(System.in);
         //Scan login info to edit them
         System.out.print("Enter the old username: ");
@@ -61,17 +65,17 @@ public class Admin extends AdminMethods {
     }
 
     // Admin password setter
-    public void setPassword(String password) {
+    /*public void setPassword(String password) {
         Password = password;
         Scanner userInputScanner = new Scanner(System.in);
         //Scan login info to edit them
-        System.out.print("Enter the old username: ");
+        System.out.print("Enter the current username: ");
         String oldUsername = userInputScanner.nextLine();
-        System.out.print("Enter the old password: ");
+        System.out.print("Enter the current password: ");
         String oldPassword = userInputScanner.nextLine();
         //passing login info to the edit file method
         file.editFile("Admin", oldUsername, oldPassword);
-    }
+    }*/
 
     // Admin username getter
     public String getUsername() {
@@ -91,7 +95,7 @@ public class Admin extends AdminMethods {
 
     //Admin view total spots in the parking area
     public String viewTotalSpots(){
-      return database_handle.retrieveData("spots");
+        return database_handle.retrieveData("spots");
 
     }
 
@@ -107,7 +111,7 @@ public class Admin extends AdminMethods {
     }
     //admin update user_id
     public String updateUser(String  id,String newID){
-       return database_handle.updateCustomerId(id,newID);
+        return database_handle.updateCustomerId(id,newID);
 
     }
     //admin update operator_name
@@ -117,12 +121,12 @@ public class Admin extends AdminMethods {
     }
     //admin update operator_password
     public String updateOperatorPass(String oldPass,String newPass){
-       return database_handle.updateOperatorPass(oldPass,newPass);
+        return database_handle.updateOperatorPass(oldPass,newPass);
 
     }
     //admin update shiftPayment
     public String updatePayment(int shift, double payment){
-       return database_handle.updatePayment(shift,payment);
+        return database_handle.updatePayment(shift,payment);
 
     }
     //admin delete customerData
@@ -132,7 +136,7 @@ public class Admin extends AdminMethods {
     }
     //admin delete OperatorData
     public String deleteOperator(String name){
-       return database_handle.deleteOperatorData(name);
+        return database_handle.deleteOperatorData(name);
 
     }
     public String parkedCar(){
