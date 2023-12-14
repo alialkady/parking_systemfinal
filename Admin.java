@@ -11,7 +11,7 @@ abstract class AdminMethods{
     public abstract String updateUser(String id,String newID);
     public abstract String updateOperatorName(String oldName,String newName);
     public abstract String updateOperatorPass(String oldPass,String newPass);
-    public abstract String updatePayment(int shift, double payment);
+
     public abstract String deleteCustomer(String entry_id);
     public abstract String deleteOperator(String name);
     public abstract String parkedCar();
@@ -124,11 +124,7 @@ public class Admin extends AdminMethods {
         return database_handle.updateOperatorPass(oldPass,newPass);
 
     }
-    //admin update shiftPayment
-    public String updatePayment(int shift, double payment){
-        return database_handle.updatePayment(shift,payment);
 
-    }
     //admin delete customerData
     public String deleteCustomer(String entry_id){
         return database_handle.deleteCustomerData(entry_id);

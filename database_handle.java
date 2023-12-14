@@ -174,7 +174,7 @@ public class database_handle {
                                 .append("transaction dateTime: ").append(timestamp).append("\n")
                                 .append("slot: ").append(slot).append("\n")
                                 .append("Exit transaction dateTime: ").append(exitTransaction).append("\n")
-                                .append("payment: ").append(payment).append('\n').append("=====").append("\n");
+                                .append("payment: ").append(payment).append('\n').append("====================================").append("\n");
                     } else if (table.equals("spots")) {
                         int spots = resultSet.getInt("spot");
                         String spot_free = resultSet.getString("spot_free");
@@ -201,12 +201,16 @@ public class database_handle {
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
                 preparedStatement.setString(1, new_id);
                 preparedStatement.setString(2, entry_id);
-                preparedStatement.executeUpdate();
-
-                return "Data updated successfully.";
+                int rowAffected = preparedStatement.executeUpdate();
+                if(rowAffected>0) {
+                    return "Data updated successfully.";
+                }
+                else{
+                    return "No matched data";
+                }
             }
         } catch (SQLException e) {
-            return "Data couldn't update successfully.";
+            return "Data couldn't update.";
         }
     }
 
@@ -217,9 +221,13 @@ public class database_handle {
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
                 preparedStatement.setString(1, newUser);
                 preparedStatement.setString(2, username);
-                preparedStatement.executeUpdate();
-
-                return "Data updated successfully.";
+                int rowAffected = preparedStatement.executeUpdate();
+                if(rowAffected>0) {
+                    return "Data updated successfully.";
+                }
+                else{
+                    return "No matched data";
+                }
             }
         } catch (SQLException e) {
             return "Data couldn't be updated.";
@@ -233,30 +241,20 @@ public class database_handle {
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
                 preparedStatement.setString(1, newPass);
                 preparedStatement.setString(2, password);
-                preparedStatement.executeUpdate();
-
-                return "Data updated successfully.";
+                int rowAffected = preparedStatement.executeUpdate();
+                if(rowAffected>0) {
+                    return "Data updated successfully.";
+                }
+                else{
+                    return "No matched data";
+                }
             }
         } catch (SQLException e) {
             return "Data couldn't be updated.";
         }
     }
 
-    public static String updatePayment(int shift, double payment) {
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
-            String updateQuery = "UPDATE payment SET shifts_payment = ? WHERE shift_order = ?";
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
-                preparedStatement.setDouble(1, payment);
-                preparedStatement.setInt(2, shift);
-                preparedStatement.executeUpdate();
-
-                return "Data updated successfully.";
-            }
-        } catch (SQLException e) {
-            return "Data couldn't be updated.";
-        }
-    }
 
     public static String deleteCustomerData(String id) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
@@ -264,12 +262,16 @@ public class database_handle {
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
                 preparedStatement.setString(1, id);
-                preparedStatement.executeUpdate();
-
-                return "Data deleted successfully.";
+                int rowAffected = preparedStatement.executeUpdate();
+                if(rowAffected>0) {
+                    return "Customer deleted successfully.";
+                }
+                else{
+                    return "No matched data";
+                }
             }
         } catch (SQLException e) {
-            return "Data couldn't delete.";
+            return "Customer couldn't delete.";
         }
     }
 
@@ -279,12 +281,16 @@ public class database_handle {
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
                 preparedStatement.setString(1, username);
-                preparedStatement.executeUpdate();
-
-                return "Data deleted successfully.";
+                int rowAffected = preparedStatement.executeUpdate();
+                if(rowAffected>0) {
+                    return "Operator deleted successfully.";
+                }
+                else{
+                    return "No matched data";
+                }
             }
         } catch (SQLException e) {
-            return "Data couldn't be deleted.";
+            return "Operator couldn't be deleted.";
         }
     }
 

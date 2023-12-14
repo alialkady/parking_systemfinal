@@ -198,12 +198,11 @@ public class menues{
             System.out.println("6. Update Customer ID");
             System.out.println("7. Update Operator Name");
             System.out.println("8. Update Operator Pass");
-            System.out.println("9. Update Payment");
-            System.out.println("10. Delete Customer");
-            System.out.println("11. Delete Operator");
-            System.out.println("12. View Parked Cars");
-            System.out.println("13. View Car Reports");
-            System.out.println("14. Back to Main Menu");
+            System.out.println("9. Delete Customer");
+            System.out.println("10. Delete Operator");
+            System.out.println("11. View Parked Cars");
+            System.out.println("12. View shifts Report");
+            System.out.println("13. Back to Main Menu");
             System.out.print("Choose an option: ");
 
             int choice2 = scanner.nextInt();
@@ -212,10 +211,10 @@ public class menues{
                 case 1:
                     System.out.print("Enter the number of new slots to add: ");
                     int newSlots = scanner.nextInt();
-                    admin.addSpots(newSlots);
+                    System.out.println(admin.addSpots(newSlots));
                     break;
                 case 2:
-                    admin.viewTotalSpots();
+                    System.out.println(admin.viewTotalSpots());
                     break;
                 case 3:
                     /*Scanner adminScanner = new Scanner(System.in);
@@ -224,7 +223,7 @@ public class menues{
                     System.out.print("Enter new Password: ");
                     String pass = adminScanner.nextLine();*/
                     admin.setUsernameAndPass();
-                    adminMenu();
+                    //adminMenu();
                     break;
                 case 4:
                     Scanner adminScanner1 = new Scanner(System.in);
@@ -232,7 +231,7 @@ public class menues{
                     String ID = adminScanner1.nextLine();
                     System.out.print("Enter Customer PlateNummber: ");
                     String platenumber = adminScanner1.nextLine();
-                    admin.addCustomer(ID, platenumber);
+                    System.out.println(admin.addCustomer(ID, platenumber));
                     break;
                 case 5:
                     Scanner adminScanner2 = new Scanner(System.in);
@@ -242,7 +241,7 @@ public class menues{
                     String pass = adminScanner2.nextLine();
                     System.out.print("Enter Operator Shift No: ");
                     int shift = adminScanner2.nextInt();
-                    admin.addOperator(username, pass, shift);
+                    System.out.println(admin.addOperator(username, pass, shift));
                     break;
                 case 6:
                     Scanner adminScanner3 = new Scanner(System.in);
@@ -250,7 +249,7 @@ public class menues{
                     String oldID = adminScanner3.nextLine();
                     System.out.print("Enter new Customer ID: ");
                     String newID = adminScanner3.nextLine();
-                    admin.updateUser(oldID, newID);
+                    System.out.println(admin.updateUser(oldID, newID));
                     break;
                 case 7:
                     Scanner adminScanner4 = new Scanner(System.in);
@@ -258,7 +257,7 @@ public class menues{
                     String oldOpName = adminScanner4.nextLine();
                     System.out.print("Enter new Username: ");
                     String newOpName = adminScanner4.nextLine();
-                    admin.updateOperatorName(oldOpName, newOpName);
+                    System.out.println(admin.updateOperatorName(oldOpName, newOpName));
                     break;
                 case 8:
                     Scanner adminScanner5 = new Scanner(System.in);
@@ -266,35 +265,28 @@ public class menues{
                     String oldOpPass = adminScanner5.nextLine();
                     System.out.print("Enter new Password: ");
                     String newOpPass = adminScanner5.nextLine();
-                    admin.updateOperatorPass(oldOpPass, newOpPass);
+                    System.out.println(admin.updateOperatorPass(oldOpPass, newOpPass));
                     break;
+
                 case 9:
-                    Scanner adminScanner6 = new Scanner(System.in);
-                    System.out.print("Enter Operator shift No: ");
-                    int shiftNo = adminScanner6.nextInt();
-                    System.out.print("Enter Payments amount: ");
-                    double payed = adminScanner6.nextInt();
-                    admin.updatePayment(shiftNo, payed);
-                    break;
-                case 10:
                     Scanner adminScanner7 = new Scanner(System.in);
                     System.out.print("Enter Customer ID: ");
                     String CustomerID = adminScanner7.nextLine();
-                    admin.deleteCustomer(CustomerID);
+                    System.out.println(admin.deleteCustomer(CustomerID));
+                    break;
+                case 10:
+                    Scanner adminScanner8 = new Scanner(System.in);
+                    System.out.print("Enter Operator name: ");
+                    String OpID = adminScanner8.nextLine();
+                    System.out.println(admin.deleteOperator(OpID));
                     break;
                 case 11:
-                    Scanner adminScanner8 = new Scanner(System.in);
-                    System.out.print("Enter Operator ID: ");
-                    String OpID = adminScanner8.nextLine();
-                    admin.deleteOperator(OpID);
-                    break;
-                case 12:
                     System.out.println(admin.parkedCar());
                     break;
-                case 13:
+                case 12:
                     System.out.println(admin.carReports());
                     break;
-                case 14:
+                case 13:
                     backToMain = true;
                     break;
                 default:
