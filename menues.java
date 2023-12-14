@@ -185,7 +185,7 @@ public class menues{
 
     }
 
-    public static void adminActions(){
+   public static void adminActions(){
         Scanner scanner = new Scanner(System.in);
         boolean backToMain = false;
         while (!backToMain) {
@@ -193,7 +193,17 @@ public class menues{
             System.out.println("1. Add Slots");
             System.out.println("2. View Total Slots");
             System.out.println("3. Reset username and password");
-            System.out.println("4. Back to Main Menu");
+            System.out.println("4. Add customer");
+            System.out.println("5. Add Operator");
+            System.out.println("6. Update Customer ID");
+            System.out.println("7. Update Operator Name");
+            System.out.println("8. Update Operator Pass");
+            System.out.println("9. Update Payment");
+            System.out.println("10. Delete Customer");
+            System.out.println("11. Delete Operator");
+            System.out.println("12. View Parked Cars");
+            System.out.println("13. View Car Reports");
+            System.out.println("14. Back to Main Menu");
             System.out.print("Choose an option: ");
 
             int choice2 = scanner.nextInt();
@@ -202,10 +212,10 @@ public class menues{
                 case 1:
                     System.out.print("Enter the number of new slots to add: ");
                     int newSlots = scanner.nextInt();
-                    System.out.println(admin.addSpots(newSlots));
+                    admin.addSpots(newSlots);
                     break;
                 case 2:
-                    System.out.println(admin.viewTotalSpots());
+                    admin.viewTotalSpots();
                     break;
                 case 3:
                     /*Scanner adminScanner = new Scanner(System.in);
@@ -213,9 +223,78 @@ public class menues{
                     String username = adminScanner.nextLine();
                     System.out.print("Enter new Password: ");
                     String pass = adminScanner.nextLine();*/
-                   admin.setUsernameAndPass();
+                    admin.setUsernameAndPass();
                     adminMenu();
+                    break;
                 case 4:
+                    Scanner adminScanner1 = new Scanner(System.in);
+                    System.out.print("Enter Customer Id: ");
+                    String ID = adminScanner1.nextLine();
+                    System.out.print("Enter Customer PlateNummber: ");
+                    String platenumber = adminScanner1.nextLine();
+                    admin.addCustomer(ID, platenumber);
+                    break;
+                case 5:
+                    Scanner adminScanner2 = new Scanner(System.in);
+                    System.out.print("Enter Operator Username: ");
+                    String username = adminScanner2.nextLine();
+                    System.out.print("Enter Operator Password: ");
+                    String pass = adminScanner2.nextLine();
+                    System.out.print("Enter Operator Shift No: ");
+                    int shift = adminScanner2.nextInt();
+                    admin.addOperator(username, pass, shift);
+                    break;
+                case 6:
+                    Scanner adminScanner3 = new Scanner(System.in);
+                    System.out.print("Enter Old Customer ID: ");
+                    String oldID = adminScanner3.nextLine();
+                    System.out.print("Enter new Customer ID: ");
+                    String newID = adminScanner3.nextLine();
+                    admin.updateUser(oldID, newID);
+                    break;
+                case 7:
+                    Scanner adminScanner4 = new Scanner(System.in);
+                    System.out.print("Enter Old Username: ");
+                    String oldOpName = adminScanner4.nextLine();
+                    System.out.print("Enter new Username: ");
+                    String newOpName = adminScanner4.nextLine();
+                    admin.updateOperatorName(oldOpName, newOpName);
+                    break;
+                case 8:
+                    Scanner adminScanner5 = new Scanner(System.in);
+                    System.out.print("Enter Old Password: ");
+                    String oldOpPass = adminScanner5.nextLine();
+                    System.out.print("Enter new Password: ");
+                    String newOpPass = adminScanner5.nextLine();
+                    admin.updateOperatorPass(oldOpPass, newOpPass);
+                    break;
+                case 9:
+                    Scanner adminScanner6 = new Scanner(System.in);
+                    System.out.print("Enter Operator shift No: ");
+                    int shiftNo = adminScanner6.nextInt();
+                    System.out.print("Enter Payments amount: ");
+                    double payed = adminScanner6.nextInt();
+                    admin.updatePayment(shiftNo, payed);
+                    break;
+                case 10:
+                    Scanner adminScanner7 = new Scanner(System.in);
+                    System.out.print("Enter Customer ID: ");
+                    String CustomerID = adminScanner7.nextLine();
+                    admin.deleteCustomer(CustomerID);
+                    break;
+                case 11:
+                    Scanner adminScanner8 = new Scanner(System.in);
+                    System.out.print("Enter Operator ID: ");
+                    String OpID = adminScanner8.nextLine();
+                    admin.deleteOperator(OpID);
+                    break;
+                case 12:
+                    System.out.println(admin.parkedCar());
+                    break;
+                case 13:
+                    System.out.println(admin.carReports());
+                    break;
+                case 14:
                     backToMain = true;
                     break;
                 default:
@@ -225,3 +304,4 @@ public class menues{
         }
     }
 }
+
