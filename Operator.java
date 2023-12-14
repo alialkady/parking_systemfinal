@@ -38,11 +38,9 @@ public class Operator {
     }
 
 
-    public int freeSpot(){
-
-       int spot =   file.readFile("slot");
-         database_handle.spotFree(spot);
-         return 1;
+    public int freeSpot(String id){
+        database_handle.freeSpot(id);
+        return 1;
     }
 
 

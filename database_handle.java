@@ -468,7 +468,20 @@ public class database_handle {
 
         return freeSpots;
     }
+    public static int freeSpot(String id) {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String insertQuery = "UPDATE spots SET spot_free = 'free' WHERE spot IN (SELECT slot FROM customers where entry_id = ?);";
 
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setString(1, id);
+                preparedStatement.executeUpdate();
+
+                return 1;
+            }
+        } catch (SQLException e) {
+            return -1;
+        }
+    }
 }
 
 

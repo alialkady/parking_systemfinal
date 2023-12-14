@@ -23,7 +23,7 @@ public class Main {
        // System.out.println(tst.assignedSlot("123"));
 
         //System.out.println(database_handle.assignSlotToCustomer(8,"34240"));
-        //System.out.println(database_handle.insertOperatorData("hassan","123",1));
+        //System.out.println(database_handle.insertCustomerData("jesica","hhh"));
      //   System.out.println(database_handle.checkOperator("hassan","123"));
     }
 }

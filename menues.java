@@ -54,7 +54,7 @@ public class menues{
 
 
               operator.generateEntryID(plateNumber);
-              System.out.println(operator.assignedSlot(plateNumber));
+              operator.assignedSlot(plateNumber);
                 System.out.println(operator.entryTicket(plateNumber));
 
 
@@ -69,7 +69,7 @@ public class menues{
                 System.out.print("Enter entry ID: ");
                 String providedEntryID = scanner.nextLine();
 
-                operator.freeSpot();
+
 
 
                 operator.calculateParkingDurationHours(providedEntryID);
@@ -79,6 +79,7 @@ public class menues{
 
                 operator.calculateParkingFee(providedEntryID);
                 System.out.println(operator.printExitTicket(providedEntryID));
+                operator.freeSpot(providedEntryID);
                // operator.freeSpot();
                 //customer.printExitTicket(providedEntryID);
                 break;
@@ -201,10 +202,10 @@ public class menues{
                 case 1:
                     System.out.print("Enter the number of new slots to add: ");
                     int newSlots = scanner.nextInt();
-                    admin.addSpots(newSlots);
+                    System.out.println(admin.addSpots(newSlots));
                     break;
                 case 2:
-                    admin.viewTotalSpots();
+                    System.out.println(admin.viewTotalSpots());
                     break;
                 case 3:
                     /*Scanner adminScanner = new Scanner(System.in);
@@ -212,7 +213,7 @@ public class menues{
                     String username = adminScanner.nextLine();
                     System.out.print("Enter new Password: ");
                     String pass = adminScanner.nextLine();*/
-                    admin.setUsernameAndPass();
+                   admin.setUsernameAndPass();
                     adminMenu();
                 case 4:
                     backToMain = true;

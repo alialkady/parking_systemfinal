@@ -24,7 +24,7 @@ public class file {
     }
 
     //read file
-    public static void readFile(String name){
+    public static void printFile(String name){
         try {
             // Create obj with the file name
             File myObj = new File(name + ".txt");
@@ -48,6 +48,32 @@ public class file {
             e.printStackTrace();
         }
     }
+    public static int readFile(String name){
+        try {
+            // Create obj with the file name
+            File myObj = new File(name + ".txt");
+
+
+            Scanner myReader = new Scanner(myObj);
+
+            // Loop through lines
+            while (myReader.hasNextLine()) {
+                int data = myReader.nextInt();
+                // Print
+                return data;
+            }
+
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            // Let the calling code handle the exception
+            return 500;
+        } catch (Exception e) {
+            return -1;
+
+        }
+    return 300;
+    }
+
 
     public static boolean adminCheck(/*String name, String user, String pass*/){
         // creating two strings to hold the entered login info
@@ -101,14 +127,14 @@ public class file {
 
 
     //write in the file
-    public static void writeFile(String name){
+    public static void writeFile(String name,int slot){
         try{
             //name of the file you will write in
             FileWriter write =  new FileWriter(name+".txt");
             Scanner writer = new Scanner(System.in);
-            System.out.print("Write: ");
-            String text = writer.nextLine();
-            write.write(text);
+           // System.out.print("Write: ");
+            //String text = writer.nextLine();
+            write.write(slot);
             write.close();
 
 
@@ -315,4 +341,58 @@ public class file {
 
         return false;
     }
+    public static void insertDataAtLine(String name, int lineNumber, String dataToInsert) {
+        try {
+            // Create obj with the file name
+            File myObj = new File(name + ".txt");
+
+            // Create a temporary file to store the updated content
+            File tempFile = new File(name + "_temp.txt");
+            FileWriter tempWriter = new FileWriter(tempFile);
+
+            boolean inserted = false;
+
+            // Read the existing content of the file
+            try (Scanner myReader = new Scanner(myObj)) {
+                int currentLineNumber = 1;
+
+                // Process the content obtained from the readFile method
+                while (myReader.hasNextLine()) {
+                    String currentLine = myReader.nextLine();
+
+                    // Insert data at the specified line
+                    if (currentLineNumber == lineNumber) {
+                        tempWriter.write(dataToInsert + System.getProperty("line.separator"));
+                        inserted = true;
+                    }
+
+                    // Write the current line to the temporary file
+                    tempWriter.write(currentLine + System.getProperty("line.separator"));
+                    currentLineNumber++;
+                }
+
+                // If the specified line number is greater than the current number of lines,
+                // append the data at the end of the file
+                if (lineNumber > currentLineNumber && !inserted) {
+                    tempWriter.write(dataToInsert + System.getProperty("line.separator"));
+                }
+            }
+
+            tempWriter.close();
+
+            // Replace the original file with the temporary file
+            tempFile.renameTo(new File(name + ".txt"));
+
+            if (inserted) {
+                System.out.println("Data inserted at line " + lineNumber + " successfully.");
+            } else {
+                System.out.println("Specified line number is out of range. No changes made.");
+            }
+
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
 }
