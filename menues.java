@@ -21,7 +21,11 @@ public class menues{
                         OperatorMenu();
                     break;
                 case 3:
-                    adminMenu();
+                    if (adminLogin()) {
+                        adminMenu();
+                    } else {
+                        System.out.println("Admin login failed. Access denied.");
+                    }
                     break;
                 case 4:
                     System.out.println("Exiting the Parking System. Goodbye!");
@@ -50,9 +54,13 @@ public class menues{
             case 1:
                 System.out.print("Enter vehicle plate number: ");
                 String plateNumber = scanner.nextLine();
-                System.out.println(operator.generateEntryID(plateNumber));
-               System.out.println(operator.assignedSlot(plateNumber));
+
+
+
+              operator.generateEntryID(plateNumber);
+              System.out.println(operator.assignedSlot(plateNumber));
                 System.out.println(operator.entryTicket(plateNumber));
+
 
                 //operator.recordEntryTime();
                 //operator.assignedSlot(plateNumber);
@@ -64,10 +72,18 @@ public class menues{
             case 2:
                 System.out.print("Enter entry ID: ");
                 String providedEntryID = scanner.nextLine();
+
+                operator.freeSpot();
+
+
                 operator.calculateParkingDurationHours(providedEntryID);
+
+
+
+
                 operator.calculateParkingFee(providedEntryID);
                 System.out.println(operator.printExitTicket(providedEntryID));
-                //database_handle.spotFree(operator.assignedSlot(plateNumber));
+               // operator.freeSpot();
                 //customer.printExitTicket(providedEntryID);
                 break;
             case 3:
@@ -91,8 +107,8 @@ public class menues{
             String username = scanner.nextLine();
             System.out.print("Enter Operator Password: ");
             String password = scanner.nextLine();
-
-            if (username.equals(OPERATOR_USERNAME) && password.equals(OPERATOR_PASSWORD)) {
+            int check = database_handle.checkOperator(username,password);
+            if (check==1) {
                 System.out.println("Login successful!");
                 operatorActions(entryOperator);
                 backToMain = true;
@@ -112,19 +128,15 @@ public class menues{
         while (!backToLogin) {
             System.out.println("===== Entry Station Operator Menu =====");
             System.out.println("1. Display Free Slots");
-            System.out.println("2. Display Plate Numbers in Every Slot");
-            System.out.println("3. Back to Login");
+            System.out.println("2. Back to Login");
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1:
-                    System.out.println(Operator.displayFreeSpots());
+                    System.out.println(Operator.freeSpots());
                     break;
                 case 2:
-                    System.out.println(Operator.displayFreeSpots());
-                    break;
-                case 3:
                     backToLogin = true;
                     break;
                 default:
@@ -134,62 +146,35 @@ public class menues{
         }
     }
 
+    public static boolean adminLogin() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter admin username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter admin password: ");
+        String password = scanner.nextLine();
+
+        // Simulated admin credentials
+        String adminUsername = "admin";
+        String adminPassword = "password";
+
+        return username.equals(adminUsername) && password.equals(adminPassword);
+    }
+
+
     public static void adminMenu() {
         Scanner scanner = new Scanner(System.in);
         boolean backToMain = false;
 
-        System.out.println("Admin Menu");
-        System.out.println("1. Log in");
-        System.out.println("2. Sign UP");
-        System.out.println("3. Back");
-        System.out.print("Choose an option: ");
-        int choice1 = scanner.nextInt();
-
-        scanner.nextLine(); // Consume newline
-        //Admin adminLogin;
-        Admin adminSignup;
-        switch (choice1) {
-            case 1:
-                //adminLogin = new Admin();
-                if(file.adminCheck()){
-                    adminActions();
-                }
-                else System.out.println("Access Denied");
-                break;
-            case 2:
-                Scanner adminScanner = new Scanner(System.in);
-                System.out.print("Enter Username: ");
-                String username = adminScanner.nextLine();
-                System.out.print("Enter Password: ");
-                String pass = adminScanner.nextLine();
-                adminSignup = new Admin(username, pass);
-                adminMenu();
-                break;
-            case 3:
-                backToMain = true;
-                break;
-            default:
-                System.out.println("Invalid option. Please choose again.");
-                break;
-        }
-
-
-    }
-
-    public static void adminActions(){
-        Scanner scanner = new Scanner(System.in);
-        boolean backToMain = false;
         while (!backToMain) {
             System.out.println("===== Admin Menu =====");
             System.out.println("1. Add Slots");
             System.out.println("2. View Total Slots");
-            System.out.println("3. Reset username and password");
-            System.out.println("4. Back to Main Menu");
+            System.out.println("3. Back to Main Menu");
             System.out.print("Choose an option: ");
 
-            int choice2 = scanner.nextInt();
+            int choice = scanner.nextInt();
             Admin admin=new Admin();
-            switch (choice2) {
+            switch (choice) {
                 case 1:
                     System.out.print("Enter the number of new slots to add: ");
                     int newSlots = scanner.nextInt();
@@ -199,14 +184,6 @@ public class menues{
                     admin.viewTotalSpots();
                     break;
                 case 3:
-                    /*Scanner adminScanner = new Scanner(System.in);
-                    System.out.print("Enter new Username: ");
-                    String username = adminScanner.nextLine();
-                    System.out.print("Enter new Password: ");
-                    String pass = adminScanner.nextLine();*/
-                    admin.setUsernameAndPass();
-                    adminMenu();
-                case 4:
                     backToMain = true;
                     break;
                 default:

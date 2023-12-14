@@ -6,6 +6,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 public class database_handle {
 
     // JDBC URL, username, and password of SQL Server
@@ -55,6 +57,23 @@ public class database_handle {
             return "slot didn't assign";
         }
     }
+    public static String spotFree(int slot) {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String insertQuery = "UPDATE spots set spot_free = 'free' where spot =?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setInt(1, slot);
+
+
+                preparedStatement.executeUpdate();
+
+                return "slot is updated";
+            }
+        } catch (SQLException e) {
+            return "slot didn't update";
+        }
+    }
+
 
     // insert methods
     public static String insertOperatorData(String name, String pass, int shift) {
@@ -76,7 +95,7 @@ public class database_handle {
 
     public static String insertCustomerData(String entry_id, String plate_number) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
-            String insertQuery = "INSERT INTO customers (entry_id, plate_number,transaction_date) VALUES (?, ?,?)";
+            String insertQuery = "INSERT INTO customers (entry_id, plate_number, transaction_date) VALUES (?, ?, ?)";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
                 preparedStatement.setString(1, entry_id);
@@ -87,7 +106,8 @@ public class database_handle {
                 return "Data inserted successfully.";
             }
         } catch (SQLException e) {
-            return "Data couldn't be inserted.";
+            e.printStackTrace(); // Print the exception details for debugging
+            return "Data couldn't be inserted. Error: " + e.getMessage();
         }
     }
 
@@ -401,7 +421,58 @@ public class database_handle {
 
 
     }
+    public static int checkOperator(String username,String password) {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String selectQuery = "select username,password from operator where username =? and password = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                preparedStatement.setString(1, username);
+                preparedStatement.setString(2, password);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    // Move the cursor to the first row
+                    String name = resultSet.getString("username");
+                    String pass = resultSet.getString("password");
+                    return 1;
+                } else {
+                    // No matching user found
+                    return 0;
+                }
+            }
+        } catch (SQLException e) {
+            return -1;
+        }
+    }
+
+
+    public static List<Integer> getFreeSpots() {
+        List<Integer> freeSpots = new ArrayList<>();
+
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String selectQuery = "SELECT spot FROM spots WHERE spot_free = 'free'";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    int spot = resultSet.getInt("spot");
+                    freeSpots.add(spot);
+                }
+            }
+        } catch (SQLException e) {
+            // Handle SQL exceptions
+            e.printStackTrace();
+        }
+
+        return freeSpots;
+    }
+
 }
+
+
+
 
 
 

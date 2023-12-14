@@ -3,6 +3,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -15,7 +16,7 @@ public class Operator {
     private String entryID;
     private LocalDateTime entryDateTime;
     private String availableSlot;
-    private String carPlateNumber;
+    private  String carPlateNumber;
     private double parkingFeePerHour = 2.5; // Assuming a fixed fee per hour
 
 
@@ -30,13 +31,21 @@ public class Operator {
     public int assignedSlot(String carPlateNumber){
         this.carPlateNumber = carPlateNumber;
       int slot =  database_handle.assignSlot(entryID);
-       database_handle.assignSlotToCustomer(slot,entryID);
-        return slot;
+      database_handle.assignSlotToCustomer(slot,entryID);
 
+      // file.writeFile("slot",slot);
+        return slot;
     }
-    public String freeSpot(){
-        return database_handle.spotFree(assignedSlot(this.carPlateNumber));
+
+
+    public int freeSpot(){
+
+       int spot =   file.readFile("slot");
+         database_handle.spotFree(spot);
+         return 1;
     }
+
+
 
     /*public String printEntryTicket(String platenumber) {
         this.carPlateNumber= platenumber;
@@ -108,8 +117,17 @@ public class Operator {
                 //return database_handle.printExitTicket(providedEntryID);*/
                 }
 
-public static String displayFreeSpots(){
+public static String displaySpots(){
        return database_handle.retrieveData("spots");
+        /*
+        database_handle database= new database_handle();
+        void availableSlot = String.valueOf(database.retrieveData("spots"));
+        System.out.println("Availble Spots: " +availableSlot);
+
+         */
+    }
+    public static List<Integer> freeSpots(){
+        return database_handle.getFreeSpots();
         /*
         database_handle database= new database_handle();
         void availableSlot = String.valueOf(database.retrieveData("spots"));
