@@ -34,3 +34,11 @@ shifts_payment decimal
 drop table payment
 Go
 
+  update spots 
+  set spot_free = 'free' where spot_free ='notFree'
+
+ 
+UPDATE s
+SET s.spot_free = 'free'  -- Set the new value for the 'spot_free' column
+FROM spots s
+INNER JOIN customers c ON s.spot = c.slot
