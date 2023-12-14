@@ -314,11 +314,15 @@ public class database_handle {
 
     public static String setFees(String id, double fees) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
-            String insertQuery = "update customers set customer_payment = ? where entry_id = ?";
+            String insertQuery = "update customers set customer_payment = ? where entry_id = ? " +
+                    "update payment set shifts_payment +=? where FORMAT(GETDATE(), 'HH:mm:ss') between '00:00:00' and '12:00:00' and shift_order = 1" +
+                    " update payment set shifts_payment +=? where FORMAT(GETDATE(), 'HH:mm:ss') between'12:00:01' and '23:59:59'  and shift_order = 2";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
                 preparedStatement.setDouble(1, fees);
                 preparedStatement.setString(2, id);
+                preparedStatement.setDouble(3, fees);
+                preparedStatement.setDouble(4, fees);
                 preparedStatement.executeUpdate();
 
                 return "Data inserted successfully.";

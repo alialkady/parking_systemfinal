@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.time.Duration;
 import java.util.List;
-import java.util.UUID;
+
+import java.text.SimpleDateFormat;
 
 
 
@@ -21,7 +22,7 @@ public class Operator {
 
 
     public String generateEntryID(String plateNumber) {
-       UUID uuid = UUID.randomUUID();
+
         entryID = String.valueOf((int) (Math.random() * 100001));
         this.carPlateNumber = plateNumber;
 
@@ -61,14 +62,14 @@ public class Operator {
         LocalDateTime exitTime = LocalDateTime.now();
         Duration duration = Duration.between(entryDateTime, exitTime);
         database_handle.setExitDate(entryID, Timestamp.valueOf(exitTime));
-        return duration.getSeconds() / 3600.0;
+        return duration.getSeconds() / 1.0;
     }
 
     public double calculateParkingFee(String id) {
         this.entryID=id;
         double hours = calculateParkingDurationHours(entryID);
         double fees = hours* parkingFeePerHour;
-        System.out.println(database_handle.setFees(entryID,fees));
+        database_handle.setFees(entryID,fees);
         return fees;
 
     }
