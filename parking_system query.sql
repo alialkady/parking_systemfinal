@@ -10,7 +10,7 @@ shift_time int
 drop table operator
 GO
 create table customers (
-entry_id varchar(10) unique,
+entry_id nvarchar(10) unique,
 plate_number varchar(10) unique , --maybe need to use unique constraint
 transaction_date datetime,
 slot int default 0,
@@ -25,6 +25,7 @@ create table spots(
 spot int unique, --add unique
 spot_free varchar(10)	
 )
+drop table spots
 Go
 create table payment(
 shift_order int unique,
