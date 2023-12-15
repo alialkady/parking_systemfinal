@@ -62,7 +62,7 @@ public class Operator {
         LocalDateTime exitTime = LocalDateTime.now();
         Duration duration = Duration.between(entryDateTime, exitTime);
         database_handle.setExitDate(entryID, Timestamp.valueOf(exitTime));
-        return duration.getSeconds() / 1.0;
+        return duration.getSeconds();
     }
 
     public double calculateParkingFee(String id) {

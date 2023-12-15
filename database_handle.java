@@ -417,7 +417,7 @@ public class database_handle {
                     int slot = resultSet.getInt("slot");
 
 
-                    return "entry_id: " + ID + "\n transactionDate: " + transaction_date + "\nSlot: " + slot + "\n PlateNumber " + plate_number + "\n=====";
+                    return "entry_id: " + ID + "\ntransactionDate: " + transaction_date + "\nSlot: " + slot + "\nPlateNumber: " + plate_number;
                 } else {
                     // Handle the case where no result is found
                     return "No data found for entry_id: " + id;
