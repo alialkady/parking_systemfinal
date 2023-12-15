@@ -57,23 +57,6 @@ public class database_handle {
             return "slot didn't assign";
         }
     }
-    public static String spotFree(int slot) {
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
-            String insertQuery = "UPDATE spots set spot_free = 'free' where spot =?";
-
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-                preparedStatement.setInt(1, slot);
-
-
-                preparedStatement.executeUpdate();
-
-                return "slot is updated";
-            }
-        } catch (SQLException e) {
-            return "slot didn't update";
-        }
-    }
-
 
     // insert methods
     public static String insertOperatorData(String name, String pass, int shift) {
@@ -106,8 +89,8 @@ public class database_handle {
                 return "Data inserted successfully.";
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Print the exception details for debugging
-            return "Data couldn't be inserted. Error: " + e.getMessage();
+
+            return "Data couldn't be inserted.";
         }
     }
 
@@ -127,21 +110,7 @@ public class database_handle {
         }
     }
 
-    public static String insertPayment(int shiftPayment, double payment) {
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
-            String insertQuery = "INSERT INTO payment (shift_order,shifts_payment) VALUES (?,?)";
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-                preparedStatement.setInt(1, shiftPayment);
-                preparedStatement.setDouble(2, payment);
-                preparedStatement.executeUpdate();
-
-                return "Data inserted successfully.";
-            }
-        } catch (SQLException e) {
-            return "Data couldn't be inserted.";
-        }
-    }
 
     //retrieve method
     public static String retrieveData(String table) {
@@ -299,7 +268,7 @@ public class database_handle {
             String selectQuery = "SELECT transaction_date FROM customers WHERE entry_id = ?";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
-                preparedStatement.setString(1, id); // Set the id parameter
+                preparedStatement.setString(1, id);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -307,13 +276,10 @@ public class database_handle {
                     Timestamp date = resultSet.getTimestamp("transaction_date");
                     return date;
                 } else {
-                    // Handle the case where no result is found
-                    return null; // or throw an exception, depending on your requirements
+                    return null;
                 }
             }
         } catch (SQLException e) {
-            // Handle SQL exceptions
-            e.printStackTrace();
             return Timestamp.valueOf(LocalDateTime.now());
         }
     }
@@ -338,21 +304,6 @@ public class database_handle {
         }
     }
 
-    public static String setFeesIntoPayments(int shift, double fees) {
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
-            String insertQuery = "update payment set shift_payment += ? where shift_order = ?";
-
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-                preparedStatement.setDouble(1, fees);
-                preparedStatement.setInt(2, shift);
-                preparedStatement.executeUpdate();
-
-                return "Data inserted successfully.";
-            }
-        } catch (SQLException e) {
-            return "Data couldn't be inserted.";
-        }
-    }
 
     public static String setExitDate(String id, Timestamp date) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
@@ -389,12 +340,11 @@ public class database_handle {
 
                     return "entry_id: " + ID + "\n PlateNumber " + plate_number + "\n transactionDate: " + transaction_date + "\nSlot: " + slot + "\n exitDate: " + exitTransactionDate + "\n Payment: " + payment;
                 } else {
-                    // Handle the case where no result is found
+                    freeSpot(id);
                     return "No data found for entry_id: " + id;
                 }
             }
         } catch (SQLException e) {
-            // Handle SQL exceptions
 
             return "Data couldn't be retrieved.";
         }
@@ -419,13 +369,11 @@ public class database_handle {
 
                     return "entry_id: " + ID + "\ntransactionDate: " + transaction_date + "\nSlot: " + slot + "\nPlateNumber: " + plate_number;
                 } else {
-                    // Handle the case where no result is found
+
                     return "No data found for entry_id: " + id;
                 }
             }
         } catch (SQLException e) {
-            // Handle SQL exceptions
-
             return "Data couldn't be retrieved.";
         }
 
@@ -442,12 +390,8 @@ public class database_handle {
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 if (resultSet.next()) {
-                    // Move the cursor to the first row
-                    String name = resultSet.getString("username");
-                    String pass = resultSet.getString("password");
                     return 1;
                 } else {
-                    // No matching user found
                     return 0;
                 }
             }
@@ -472,7 +416,7 @@ public class database_handle {
                 }
             }
         } catch (SQLException e) {
-            // Handle SQL exceptions
+            
             e.printStackTrace();
         }
 
@@ -492,7 +436,51 @@ public class database_handle {
             return -1;
         }
     }
-}
+    public static int fullSpots() {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String selectQuery = "SELECT spot FROM spots WHERE spot_free = 'free'";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+
+                if ( resultSet.next()) {
+                    // There are spots free
+                    return 0;
+                } else {
+                    // No spots free
+                    return 1;
+                }
+            }
+
+        } catch (SQLException e) {
+
+            return 3;
+        }
+    }
+    public static int cancelSlot(String id) {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String selectQuery = "SELECT entry_id FROM customers WHERE entry_id =?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                preparedStatement.setString(1, id);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    return 0;  // Return 0 if there is a row affected
+                } else {
+                    return 1;  // Return 1 if there is no row affected
+                }
+            }
+        } catch (SQLException e) {
+            return -1;  // Return -1 for any SQL exception
+        }
+    }
+
+    }
+
+
 
 
 

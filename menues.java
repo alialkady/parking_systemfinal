@@ -1,5 +1,8 @@
 import java.util.Scanner;
+
+
 public class menues{
+
 
     public static void homeMenue() {
         try {
@@ -52,16 +55,19 @@ public class menues{
 
         scanner.nextLine(); // Consume newline
         Operator operator=new Operator();
+        Customer customer = new Customer();
         switch (choice) {
             case 1:
                 System.out.print("Enter vehicle plate number: ");
                 String plateNumber = scanner.nextLine();
+                System.out.println(customer.CallingOperator(plateNumber));
 
-
-
+/*
               operator.generateEntryID(plateNumber);
               operator.assignedSlot(plateNumber);
                 System.out.println(operator.entryTicket(plateNumber));
+
+ */
 
 
                 //operator.recordEntryTime();
@@ -74,15 +80,8 @@ public class menues{
             case 2:
                 System.out.print("Enter entry ID: ");
                 String providedEntryID = scanner.nextLine();
-
-
-
-
+                
                 operator.calculateParkingDurationHours(providedEntryID);
-
-
-
-
                 operator.calculateParkingFee(providedEntryID);
                 System.out.println(operator.printExitTicket(providedEntryID));
                 operator.freeSpot(providedEntryID);
@@ -101,16 +100,13 @@ public class menues{
         Scanner scanner = new Scanner(System.in);
         boolean backToMain = false;
 
-        // Simulated login credentials
-        final String OPERATOR_USERNAME = "operator";
-        final String OPERATOR_PASSWORD = "password";
-
         while (!backToMain) {
             System.out.print("Enter Operator Username: ");
+
             String username = scanner.nextLine();
             System.out.print("Enter Operator Password: ");
-            String password = scanner.nextLine();
-            int check = database_handle.checkOperator(username,password);
+            String pass = scanner.nextLine();
+            int check = database_handle.checkOperator(username,pass);
             if (check==1) {
                 System.out.println("Login successful!");
                 operatorActions(entryOperator);
@@ -215,9 +211,7 @@ public class menues{
                 Admin admin=new Admin();
                 switch (choice2) {
                     case 1:
-                        System.out.print("Enter the number of new slots to add: ");
-                        int newSlots = scanner.nextInt();
-                        System.out.println(admin.addSpots(newSlots));
+                        System.out.println(admin.addSpots());
                         break;
                     case 2:
                         System.out.println(admin.viewTotalSpots());

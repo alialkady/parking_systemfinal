@@ -1,10 +1,12 @@
 import java.util.*;
 abstract class AdminMethods{
+
     public abstract void setUsernameAndPass();
     //public abstract void setPassword(String password);
     public abstract String getUsername();
     public abstract String getPassword();
-    public abstract String addSpots(int spotId);
+    public abstract int incrementSpot();
+    public abstract String addSpots();
     public abstract String viewTotalSpots();
     public abstract String addCustomer(String entry_id,String plate_number);
     public abstract String addOperator(String name, String pass,int shift);
@@ -23,6 +25,8 @@ public class Admin extends AdminMethods {
 
     private String Username;
     private String Password;
+
+    private static int spot = 0;
     //Constructor for logging into the system
     /*public Admin(){
         // creating two strings to hold the entered login info
@@ -86,11 +90,14 @@ public class Admin extends AdminMethods {
     public String getPassword() {
         return Password;
     }
-
+    public  int incrementSpot(){
+        spot++;
+        return spot;
+    }
     //Admin add spots to the parking area
-    public String addSpots(int spotId){
+    public String addSpots(){
 
-        return database_handle.insertSpot(spotId, "free");
+        return database_handle.insertSpot(incrementSpot(), "free");
     }
 
     //Admin view total spots in the parking area
