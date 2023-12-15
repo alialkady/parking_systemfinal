@@ -129,9 +129,10 @@ public class menues{
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
+            Operator operator = new Operator();
             switch (choice) {
                 case 1:
-                    System.out.println(Operator.freeSpots());
+                    System.out.println(operator.freeSpots());
                     break;
                 case 2:
                     backToLogin = true;

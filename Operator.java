@@ -2,20 +2,37 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.Duration;
 import java.util.List;
-abstract class operatorMethods{
-    public abstract String generateEntryID(String plateNumber);
-    public abstract int assignedSlot(String carPlateNumber);
-    public abstract int freeSpot(String id);
-    public abstract double calculateParkingDurationHours(String id);
-    public abstract double calculateParkingFee(String id);
-    public abstract String entryTicket(String plateNumber);
+import java.util.Arrays;
 
 
-        }
+ class operatorMethods{
+    public String generateEntryID(String plateNumber){
+        return "don't use this class";
+    }
+     public int assignedSlot(String carPlateNumber){
 
-/**
- * Operator
- */
+         return 0;
+     }
+     public  int freeSpot(String id){
+         return 0;
+     }
+     public double calculateParkingDurationHours(String id){
+        return 0.0;
+     }
+     public double calculateParkingFee(String id){
+        return 0.0;
+     }
+     public String entryTicket(String plateNumber){
+        return "don't use this class";
+     }
+     public  String printExitTicket(String providedEntryID){
+        return "don't use this class";
+     }
+     public  List<Integer> freeSpots(){
+        return Arrays.asList(0,0);
+     }
+}
+
 public class Operator extends operatorMethods {
 
     private String entryID;
@@ -24,7 +41,7 @@ public class Operator extends operatorMethods {
     private  String carPlateNumber;
     private double parkingFeePerHour = 2.5;
 
-
+    @Override
     public String generateEntryID(String plateNumber) {
 
             entryID = String.valueOf((int) (Math.random() * 100001));
@@ -34,7 +51,7 @@ public class Operator extends operatorMethods {
             return database_handle.insertCustomerData(entryID, carPlateNumber);
 
     }
-
+    @Override
     public int assignedSlot(String carPlateNumber){
 
         if(database_handle.cancelSlot(entryID)==1){
@@ -51,7 +68,7 @@ public class Operator extends operatorMethods {
         return slot;
     }
 
-
+    @Override
     public  int freeSpot(String id){
         database_handle.freeSpot(id);
         return 1;
@@ -68,7 +85,7 @@ public class Operator extends operatorMethods {
         System.out.println("Slot Number: "+ availableSlot);
         System.out.println("=====================");
     }*/
-
+    @Override
     public double calculateParkingDurationHours(String id) {
         this.entryID=id;
         entryDateTime = database_handle.getDate(id).toLocalDateTime();
@@ -77,7 +94,7 @@ public class Operator extends operatorMethods {
         database_handle.setExitDate(entryID, Timestamp.valueOf(exitTime));
         return duration.getSeconds();
     }
-
+    @Override
     public double calculateParkingFee(String id) {
         this.entryID=id;
         double hours = calculateParkingDurationHours(entryID);
@@ -108,7 +125,7 @@ public class Operator extends operatorMethods {
        // database_handle.printEntryTicket(providedEntryID);
     }
 */
-
+    @Override
      public String entryTicket(String plateNumber){
          /*
          int counter = 0;
@@ -123,9 +140,9 @@ public class Operator extends operatorMethods {
         this.carPlateNumber = plateNumber;
 
         return database_handle.setEntryTicket(entryID);
-    } 
-
-   public static String printExitTicket(String providedEntryID){
+    }
+    @Override
+   public  String printExitTicket(String providedEntryID){
         return database_handle.getCustomerData(providedEntryID);
         /*if (providedEntryID==entryID) {
             calculateParkingDurationHours(providedEntryID);
@@ -140,16 +157,8 @@ public class Operator extends operatorMethods {
                 //return database_handle.printExitTicket(providedEntryID);*/
                 }
 
-public static String displaySpots(){
-       return database_handle.retrieveData("spots");
-        /*
-        database_handle database= new database_handle();
-        void availableSlot = String.valueOf(database.retrieveData("spots"));
-        System.out.println("Availble Spots: " +availableSlot);
 
-         */
-    }
-    public static List<Integer> freeSpots(){
+    public  List<Integer> freeSpots(){
         return database_handle.getFreeSpots();
         /*
         database_handle database= new database_handle();
