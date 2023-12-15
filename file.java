@@ -1,85 +1,30 @@
-import java.io.File;  // Import the File class
-import java.io.IOException;  // Import the IOException class to handle errors
-import java.io.FileNotFoundException;  // Import this class to handle errors
-
+import java.io.File;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.*;
+
 public class file {
     public static boolean admincheck;
     //Create file
-    public static void createFile(String name) {
+   /* public static String createFile(String name) {
         try {
             // define object
             File myObj = new File(name + ".txt");
             // if condition to create and check in the same time
             if (myObj.createNewFile()) {
-                System.out.println("file created successfully");
+                return "file created successfully";
             } else {
-                System.out.println("file already exist");
+                return "file already exist";
             }
         } catch (IOException e) {
-            System.out.println("error occurred");
+            return "error occurred";
         }
+    }*/
 
-    }
-
-    //read file
-    public static void printFile(String name){
-        try {
-            // Create obj with the file name
-            File myObj = new File(name + ".txt");
-
-
-            Scanner myReader = new Scanner(myObj);
-
-            // Loop through lines
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                // Print
-                System.out.println(data);
-            }
-
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            // Let the calling code handle the exception
-            System.out.println(e);
-        } catch (Exception e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-    public static int readFile(String name){
-        try {
-            // Create obj with the file name
-            File myObj = new File(name + ".txt");
-
-
-            Scanner myReader = new Scanner(myObj);
-
-            // Loop through lines
-            while (myReader.hasNextLine()) {
-                int data = myReader.nextInt();
-                // Print
-                return data;
-            }
-
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            // Let the calling code handle the exception
-            return 500;
-        } catch (Exception e) {
-            return -1;
-
-        }
-    return 300;
-    }
-
-
-    public static boolean adminCheck(/*String name, String user, String pass*/){
-        // creating two strings to hold the entered login info
+    public static boolean adminCheck(){
         String user ="";
         String pass ="";
-        //Scanning the login info
         Scanner adminCheckScan = new Scanner(System.in);
         System.out.print("Username: ");
         user += adminCheckScan.nextLine();
@@ -87,11 +32,9 @@ public class file {
         pass += adminCheckScan.nextLine();
         try {
             int singleLoginCheck = 0;
-            // Create obj with the file name
             File myObj = new File("Admin.txt");
             Scanner myReader = new Scanner(myObj);
 
-            // Loop through lines
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 if (data.equals(user)){
@@ -102,37 +45,26 @@ public class file {
                         if (nextLine.equals(pass)){
                             singleLoginCheck++;
                             admincheck = true;
-                            //return true;
                         }
                     }
                 }
-
             }
-            // message to the admin if any entered info is wrong
             if (singleLoginCheck == 0 || singleLoginCheck == 1)
                 admincheck = false;
-                //return false;
-
             myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
         } catch (Exception e) {
             System.out.println("An error occurred.");
-            e.printStackTrace();
         }
-       // return check;
-        //return adminCheck(String name, String user, String pass);
         return admincheck;
     }
 
-
-    //write in the file
+    /*//write in the file
     public static void writeFile(String name,int slot){
         try{
             //name of the file you will write in
             FileWriter write =  new FileWriter(name+".txt");
             Scanner writer = new Scanner(System.in);
-           // System.out.print("Write: ");
+            // System.out.print("Write: ");
             //String text = writer.nextLine();
             write.write(slot);
             write.close();
@@ -143,39 +75,30 @@ public class file {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-    }
-    public static void appendFile(String name, String infoToAppend) {
+    }*/
+
+    //append in the file
+    public static String appendFile(String name, String infoToAppend) {
         try {
-            // Check if the data already exists in the file
             if (!dataExists(name, infoToAppend)) {
-                // Open the file in append mode
                 FileWriter writer = new FileWriter(name + ".txt", true);
-
-                // Append the provided information to the file
                 writer.write("\n" + infoToAppend);
-
-                // Close the file
                 writer.close();
-
-                System.out.println("Information appended successfully.");
+                return "Information appended successfully.";
             } else {
-                System.out.println("Data already exists in the file. No changes made.");
+                return "Data already exists in the file. No changes made.";
             }
-
         } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            return "An error occurred.";
         }
     }
 
     //edit data in file
-    public static void editFile(String name, String oldUsername, String oldPassword) {
+    public static String editFile(String name, String oldUsername, String oldPassword) {
         try {
-            // Read the existing content of the file
             File file = new File(name + ".txt");
             Scanner scanner = new Scanner(file);
 
-            // Create a temporary file to store the updated content
             File tempFile = new File(name + "_temp.txt");
             FileWriter tempWriter = new FileWriter(tempFile);
 
@@ -184,16 +107,12 @@ public class file {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
 
-                // Check if the current line contains the old username
                 if (line.contains(oldUsername)) {
 
-                    // Check if there is a next line (password)
                     if (scanner.hasNextLine()) {
                         String passwordLine = scanner.nextLine();
 
-                        // Check if the next line contains the old password
                         if (passwordLine.contains(oldPassword)) {
-                            // Replace the old username and password with the new scanned ones
                             Scanner newLoginInfo = new Scanner(System.in);
                             System.out.print("Enter new Username: ");
                             String newUsername = newLoginInfo.nextLine();
@@ -204,41 +123,36 @@ public class file {
 
                             found = true;
                         } else {
-                            // If the password doesn't match, write the original lines
                             tempWriter.write(line + "\n");
                             tempWriter.write(passwordLine + "\n");
                         }
                     } else {
-                        // If there is no next line, write the original line
                         tempWriter.write(line + "\n");
                     }
                 } else {
-                    // If the current line doesn't contain the old username, write the original line
                     tempWriter.write(line + "\n");
                 }
             }
 
-            // Close the scanners and writers
             scanner.close();
             tempWriter.close();
 
-            // Replace the original file with the temporary file
             if (found) {
                 file.delete();
                 tempFile.renameTo(file);
-                System.out.println("File updated successfully.");
+                return "File updated successfully.";
             } else {
                 tempFile.delete();
-                System.out.println("Old username and password not found. No changes made.");
+                return "Old username and password not found. No changes made.";
             }
 
         } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+           return "An error occurred.";
         }
     }
 
-    public static void searchInFile(String name, String searchString) {
+    //search in file
+    public static String searchInFile(String name, String searchString) {
         try {
             File file = new File(name + ".txt");
             Scanner scanner = new Scanner(file);
@@ -250,52 +164,43 @@ public class file {
                 lineNumber++;
                 String line = scanner.nextLine();
 
-                // Check if the line contains the search string
                 if (line.contains(searchString)) {
                     found = true;
-                    System.out.println("Found at line " + lineNumber + ": " + line);
+                    String S = "Found at line " + lineNumber + ": " + line;
+                    return S;
                 }
             }
 
             scanner.close();
 
             if (!found) {
-                System.out.println("Search string not found in the file.");
+                return "Search string not found in the file.";
             }
 
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            return "An error occurred.";
         }
+        return "1";
     }
-
-    public static void deleteSpecificLine(String name, String lineToDelete) {
+    //delete a line in the file
+    public static String deleteSpecificLine(String name, String lineToDelete) {
         try {
-            // Create obj with the file name
             File myObj = new File(name + ".txt");
 
-            // Create a temporary file to store the updated content
             File tempFile = new File(name + "_temp.txt");
             FileWriter tempWriter = new FileWriter(tempFile);
 
             boolean found = false;
 
-            // Read the existing content of the file
             try (Scanner myReader = new Scanner(myObj)) {
-                // Iterate over the lines and update the list
                 while (myReader.hasNextLine()) {
                     String currentLine = myReader.nextLine();
-
-                    // Check if the current line contains the content to be deleted
                     if (currentLine.contains(lineToDelete)) {
                         found = true;
-
-                        // Skip the current line and the next line
                         if (myReader.hasNextLine()) {
-                            myReader.nextLine(); // Move to the next line
+                            myReader.nextLine();
                         }
                     } else {
-                        // Write the current line to the temporary file
                         tempWriter.write(currentLine + System.getProperty("line.separator"));
                     }
                 }
@@ -303,76 +208,60 @@ public class file {
 
             tempWriter.close();
 
-            // Replace the original file with the temporary file
             tempFile.renameTo(new File(name + ".txt"));
 
             if (found) {
-                System.out.println("Specific line and the next line deleted successfully.");
+                return "Specific line and the next line deleted successfully.";
             } else {
-                System.out.println("Specified content not found in the file. No changes made.");
+                return "Specified content not found in the file. No changes made.";
             }
 
         } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            return "An error occurred.";
         }
     }
-
-    private static boolean dataExists(String name, String infoToAppend) {
+    //check if data exists in the file
+    private static boolean dataExists(String name, String infoToCheck) {
         try {
             File file = new File(name + ".txt");
             Scanner scanner = new Scanner(file);
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-
-                // Check if the line contains the provided information
-                if (line.equals(infoToAppend)) {
+                if (line.equals(infoToCheck)) {
                     scanner.close();
                     return true;
                 }
             }
-
             scanner.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred while checking data existence.");
-            e.printStackTrace();
         }
-
         return false;
     }
-    public static void insertDataAtLine(String name, int lineNumber, String dataToInsert) {
+    //insert data at a specific line
+    public static String insertDataAtLine(String name, int lineNumber, String dataToInsert) {
         try {
-            // Create obj with the file name
             File myObj = new File(name + ".txt");
 
-            // Create a temporary file to store the updated content
             File tempFile = new File(name + "_temp.txt");
             FileWriter tempWriter = new FileWriter(tempFile);
 
             boolean inserted = false;
 
-            // Read the existing content of the file
             try (Scanner myReader = new Scanner(myObj)) {
                 int currentLineNumber = 1;
-
-                // Process the content obtained from the readFile method
                 while (myReader.hasNextLine()) {
                     String currentLine = myReader.nextLine();
-
-                    // Insert data at the specified line
                     if (currentLineNumber == lineNumber) {
                         tempWriter.write(dataToInsert + System.getProperty("line.separator"));
                         inserted = true;
                     }
 
-                    // Write the current line to the temporary file
                     tempWriter.write(currentLine + System.getProperty("line.separator"));
                     currentLineNumber++;
                 }
 
-                // If the specified line number is greater than the current number of lines,
-                // append the data at the end of the file
                 if (lineNumber > currentLineNumber && !inserted) {
                     tempWriter.write(dataToInsert + System.getProperty("line.separator"));
                 }
@@ -380,19 +269,17 @@ public class file {
 
             tempWriter.close();
 
-            // Replace the original file with the temporary file
             tempFile.renameTo(new File(name + ".txt"));
 
             if (inserted) {
-                System.out.println("Data inserted at line " + lineNumber + " successfully.");
+                String S = "Data inserted at line " + lineNumber + " successfully.";
+                return S;
             } else {
-                System.out.println("Specified line number is out of range. No changes made.");
+                return "Specified line number is out of range. No changes made.";
             }
 
         } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            return "An error occurred.";
         }
     }
-
 }
