@@ -7,12 +7,21 @@ import java.util.List;
 
 import java.text.SimpleDateFormat;
 
+abstract class operatorMethods{
+    public abstract String generateEntryID(String plateNumber);
+    public abstract int assignedSlot(String carPlateNumber);
+    public abstract int freeSpot(String id);
+    public abstract double calculateParkingDurationHours(String id);
+    public abstract double calculateParkingFee(String id);
+    public abstract String entryTicket(String plateNumber);
 
+
+        }
 
 /**
  * Operator
  */
-public class Operator {
+public class Operator extends operatorMethods {
 
     private String entryID;
     private LocalDateTime entryDateTime;
@@ -39,7 +48,7 @@ public class Operator {
     }
 
 
-    public int freeSpot(String id){
+    public  int freeSpot(String id){
         database_handle.freeSpot(id);
         return 1;
     }
@@ -100,6 +109,7 @@ public class Operator {
         this.carPlateNumber = plateNumber;
         return database_handle.setEntryTicket(entryID);
     } 
+
    public static String printExitTicket(String providedEntryID){
 
         return database_handle.getCustomerData(providedEntryID);
