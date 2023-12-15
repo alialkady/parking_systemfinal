@@ -1,7 +1,7 @@
 import java.util.*;
 abstract class AdminMethods{
 
-    public abstract void setUsernameAndPass();
+    public abstract String setUsernameAndPass();
     //public abstract void setPassword(String password);
     public abstract String getUsername();
     public abstract String getPassword();
@@ -26,7 +26,7 @@ public class Admin extends AdminMethods {
     private String Username;
     private String Password;
 
-    private static int spot = 0;
+    private int spot = file.readFile("slot");
     //Constructor for logging into the system
     /*public Admin(){
         // creating two strings to hold the entered login info
@@ -55,7 +55,7 @@ public class Admin extends AdminMethods {
     }
 
     // Admin username setter
-    public void setUsernameAndPass(/*String user, String password*/) {
+    public String setUsernameAndPass(/*String user, String password*/) {
         //Username = user;
         //Password = password;
         Scanner userInputScanner = new Scanner(System.in);
@@ -65,7 +65,7 @@ public class Admin extends AdminMethods {
         System.out.print("Enter the old password: ");
         String oldPassword = userInputScanner.nextLine();
         //passing login info to the edit file method
-        file.editFile("Admin", oldUsername, oldPassword);
+        return file.editFile("Admin", oldUsername, oldPassword);
     }
 
     // Admin password setter
@@ -92,6 +92,7 @@ public class Admin extends AdminMethods {
     }
     public  int incrementSpot(){
         spot++;
+        file.writeFile("slot",spot);
         return spot;
     }
     //Admin add spots to the parking area

@@ -22,9 +22,9 @@ public class file {
         }
     }*/
 
-    public static boolean adminCheck(){
-        String user ="";
-        String pass ="";
+    public static boolean adminCheck() {
+        String user = "";
+        String pass = "";
         Scanner adminCheckScan = new Scanner(System.in);
         System.out.print("Username: ");
         user += adminCheckScan.nextLine();
@@ -37,12 +37,12 @@ public class file {
 
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                if (data.equals(user)){
+                if (data.equals(user)) {
                     singleLoginCheck++;
                     if (myReader.hasNextLine()) {
                         String nextLine = myReader.nextLine();
 
-                        if (nextLine.equals(pass)){
+                        if (nextLine.equals(pass)) {
                             singleLoginCheck++;
                             admincheck = true;
                         }
@@ -57,25 +57,44 @@ public class file {
         }
         return admincheck;
     }
+    //read file
+    public static int readFile(String name) {
 
-    /*//write in the file
-    public static void writeFile(String name,int slot){
-        try{
+        try {
+            // Create obj with the file name
+            File myObj = new File(name + ".txt");
+
+
+            Scanner myReader = new Scanner(myObj);
+                 int data = myReader.nextInt();
+                 return data;
+
+
+            //myReader.close();
+        } catch (Exception e) {
+            return -2;
+
+        }
+
+    }
+    //writeSpot in the file
+    public static String writeFile(String name, int slot) {
+        try {
             //name of the file you will write in
-            FileWriter write =  new FileWriter(name+".txt");
-            Scanner writer = new Scanner(System.in);
-            // System.out.print("Write: ");
+            FileWriter write = new FileWriter(name + ".txt");
+            // Scanner writer = new Scanner(System.in);
             //String text = writer.nextLine();
-            write.write(slot);
+            write.write(String.valueOf(slot));
             write.close();
 
+            return "data added successfully";
+
+        } catch (IOException e) {
+            return "data couldn't be added";
 
         }
-        catch (IOException e){
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }*/
+
+    }
 
     //append in the file
     public static String appendFile(String name, String infoToAppend) {
@@ -140,7 +159,7 @@ public class file {
             if (found) {
                 file.delete();
                 tempFile.renameTo(file);
-                return "File updated successfully.";
+                return "data updated successfully.";
             } else {
                 tempFile.delete();
                 return "Old username and password not found. No changes made.";

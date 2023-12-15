@@ -222,7 +222,7 @@ public class menues{
                     String username = adminScanner.nextLine();
                     System.out.print("Enter new Password: ");
                     String pass = adminScanner.nextLine();*/
-                        admin.setUsernameAndPass();
+                        System.out.println(admin.setUsernameAndPass());
                         //adminMenu();
                         break;
                     case 4:

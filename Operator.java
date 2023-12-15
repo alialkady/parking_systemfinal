@@ -1,14 +1,7 @@
-import jdk.jfr.consumer.RecordedThread;
-
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.time.Duration;
 import java.util.List;
-
-import java.text.SimpleDateFormat;
-
 abstract class operatorMethods{
     public abstract String generateEntryID(String plateNumber);
     public abstract int assignedSlot(String carPlateNumber);
@@ -27,16 +20,12 @@ public class Operator extends operatorMethods {
 
     private String entryID;
     private LocalDateTime entryDateTime;
-    private String availableSlot;
+
     private  String carPlateNumber;
-    private double parkingFeePerHour = 2.5; // Assuming a fixed fee per hour
+    private double parkingFeePerHour = 2.5;
 
 
     public String generateEntryID(String plateNumber) {
-        if(database_handle.fullSpots()==1){
-            return "no freeSpots";
-        }
-
 
             entryID = String.valueOf((int) (Math.random() * 100001));
             this.carPlateNumber = plateNumber;
@@ -47,9 +36,7 @@ public class Operator extends operatorMethods {
     }
 
     public int assignedSlot(String carPlateNumber){
-        if(database_handle.fullSpots()==1){
-            return 0;
-        }
+
         if(database_handle.cancelSlot(entryID)==1){
             return 0;
         }
@@ -123,18 +110,22 @@ public class Operator extends operatorMethods {
 */
 
      public String entryTicket(String plateNumber){
+         /*
+         int counter = 0;
          if(database_handle.fullSpots()==1){
-             return "no freeSpots";
+             counter++;
+             if(counter>1){
+                 return "no freeSpots";
+             }
          }
+
+          */
         this.carPlateNumber = plateNumber;
 
         return database_handle.setEntryTicket(entryID);
     } 
 
    public static String printExitTicket(String providedEntryID){
-       if(database_handle.fullSpots()==1){
-           return "no freeSpots";
-       }
         return database_handle.getCustomerData(providedEntryID);
         /*if (providedEntryID==entryID) {
             calculateParkingDurationHours(providedEntryID);

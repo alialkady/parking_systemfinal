@@ -78,6 +78,8 @@ public class database_handle {
 
     public static String insertCustomerData(String entry_id, String plate_number) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+
+
             String insertQuery = "INSERT INTO customers (entry_id, plate_number, transaction_date) VALUES (?, ?, ?)";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
@@ -89,7 +91,6 @@ public class database_handle {
                 return "Data inserted successfully.";
             }
         } catch (SQLException e) {
-
             return "Data couldn't be inserted.";
         }
     }
@@ -195,7 +196,7 @@ public class database_handle {
                     return "Data updated successfully.";
                 }
                 else{
-                    return "No matched data";
+                    return "data couldn't be updated";
                 }
             }
         } catch (SQLException e) {
@@ -351,34 +352,38 @@ public class database_handle {
 
     }
 
-    public static String setEntryTicket(String id) {
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
-            String selectQuery = "SELECT entry_id,transaction_date,slot,plate_number FROM customers WHERE entry_id = ?";
+        public static String setEntryTicket(String id) {
+            try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+                String selectQuery = "SELECT entry_id,transaction_date,slot,plate_number FROM customers WHERE entry_id = ?";
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
-                preparedStatement.setString(1, id);
+                try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                    preparedStatement.setString(1, id);
 
-                ResultSet resultSet = preparedStatement.executeQuery();
+                    ResultSet resultSet = preparedStatement.executeQuery();
 
-                if (resultSet.next()) {
-                    String ID = resultSet.getString("entry_id");
-                    String plate_number = resultSet.getString("plate_number");
-                    Timestamp transaction_date = resultSet.getTimestamp("transaction_date");
-                    int slot = resultSet.getInt("slot");
+                    if (resultSet.next()) {
+                        String ID = resultSet.getString("entry_id");
+                        String plate_number = resultSet.getString("plate_number");
+                        Timestamp transaction_date = resultSet.getTimestamp("transaction_date");
+                        int slot = resultSet.getInt("slot");
+                        if (slot ==0){
+                            deleteCustomerData(id);
+                            return "no freeSpots";
+                        }
 
 
-                    return "entry_id: " + ID + "\ntransactionDate: " + transaction_date + "\nSlot: " + slot + "\nPlateNumber: " + plate_number;
-                } else {
+                        return "entry_id: " + ID + "\ntransactionDate: " + transaction_date + "\nSlot: " + slot + "\nPlateNumber: " + plate_number;
+                    } else {
 
-                    return "No data found for entry_id: " + id;
+                        return "No data found for entry_id: " + id;
+                    }
                 }
+            } catch (SQLException e) {
+                return "no freeSpots";
             }
-        } catch (SQLException e) {
-            return "Data couldn't be retrieved.";
+
+
         }
-
-
-    }
     public static int checkOperator(String username,String password) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             String selectQuery = "select username,password from operator where username =? and password = ?";
