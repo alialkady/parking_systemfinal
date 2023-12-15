@@ -1,8 +1,11 @@
-interface CustomerMethods {
-    public String CallingOperator(String platenumber);
+class CustomerMethods {
+    public String CallingOperator(String platenumber){
+        return "ok";
+    }
 
 }
-public class Customer implements CustomerMethods{
+public class Customer extends CustomerMethods{
+    @Override
     public String CallingOperator(String platenumber){
         Operator operator=new Operator();
         operator.generateEntryID(platenumber);
