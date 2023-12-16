@@ -201,11 +201,12 @@ public class menues{
                 System.out.println("6. Update Customer ID");
                 System.out.println("7. Update Operator Name");
                 System.out.println("8. Update Operator Pass");
-                System.out.println("9. Delete Customer");
-                System.out.println("10. Delete Operator");
-                System.out.println("11. View Parked Cars");
-                System.out.println("12. View shifts Report");
-                System.out.println("13. Back to Main Menu");
+                System.out.println("9. Update operator shift");
+                System.out.println("10. Delete Customer");
+                System.out.println("11. Delete Operator");
+                System.out.println("12. View Parked Cars");
+                System.out.println("13. View shifts Report");
+                System.out.println("14. Back to Main Menu");
                 System.out.print("Choose an option: ");
 
                 int choice2 = scanner.nextInt();
@@ -268,26 +269,31 @@ public class menues{
                         String newOpPass = adminScanner5.nextLine();
                         System.out.println(admin.updateOperatorPass(oldOpPass, newOpPass));
                         break;
-
                     case 9:
+                        Scanner adminScanner6 = new Scanner(System.in);
+                        System.out.print("Enter operatorUsername: ");
+                        String operatorUsername= adminScanner6.nextLine();
+                        System.out.println(admin.updateShift(operatorUsername));
+                        break;
+                    case 10:
                         Scanner adminScanner7 = new Scanner(System.in);
                         System.out.print("Enter Customer ID: ");
                         String CustomerID = adminScanner7.nextLine();
                         System.out.println(admin.deleteCustomer(CustomerID));
                         break;
-                    case 10:
+                    case 11:
                         Scanner adminScanner8 = new Scanner(System.in);
                         System.out.print("Enter Operator name: ");
                         String OpID = adminScanner8.nextLine();
                         System.out.println(admin.deleteOperator(OpID));
                         break;
-                    case 11:
+                    case 12:
                         System.out.println(admin.parkedCar());
                         break;
-                    case 12:
+                    case 13:
                         System.out.println(admin.carReports());
                         break;
-                    case 13:
+                    case 14:
                         backToMain = true;
                         break;
                     default:

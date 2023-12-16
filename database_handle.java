@@ -482,6 +482,21 @@ public class database_handle {
             return -1;  // Return -1 for any SQL exception
         }
     }
+    public static String updateShift(String username) {
+        try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
+            String insertQuery = "UPDATE operator SET shift_time =  CASE WHEN shift_time = 1 THEN 2 WHEN shift_time = 2 THEN 1 ELSE shift_time END WHERE username = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setString(1, username);
+                preparedStatement.executeUpdate();
+
+                return "shift updated successfully";
+            }
+        } catch (SQLException e) {
+            return "couldn't update shift";
+        }
+    }
+
 
     }
 

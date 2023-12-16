@@ -10,6 +10,7 @@ abstract class AdminMethods{
     public abstract String updateUser(String id,String newID);
     public abstract String updateOperatorName(String oldName,String newName);
     public abstract String updateOperatorPass(String oldPass,String newPass);
+    public abstract String updateShift(String username);
 
     public abstract String deleteCustomer(String entry_id);
     public abstract String deleteOperator(String name);
@@ -128,6 +129,10 @@ public class Admin extends AdminMethods {
     public String updateOperatorPass(String oldPass,String newPass){
         return database_handle.updateOperatorPass(oldPass,newPass);
 
+    }
+    //admin update shift
+    public  String updateShift(String username){
+        return database_handle.updateShift(username);
     }
 
     //admin delete customerData
