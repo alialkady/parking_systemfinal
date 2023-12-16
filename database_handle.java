@@ -104,10 +104,10 @@ public class database_handle {
                 preparedStatement.setString(2, spot_free);
                 preparedStatement.executeUpdate();
 
-                return "Data inserted successfully.";
+                return "spot inserted successfully.";
             }
         } catch (SQLException e) {
-            return "Data can't be inserted";
+            return "spot couldn't be inserted";
         }
     }
 

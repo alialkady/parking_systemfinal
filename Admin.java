@@ -26,7 +26,7 @@ public class Admin extends AdminMethods {
     private String Username;
     private String Password;
 
-    private int spot = file.readFile("slot");
+    private static int spot = file.readFile("slot");
     //Constructor for logging into the system
     /*public Admin(){
         // creating two strings to hold the entered login info
