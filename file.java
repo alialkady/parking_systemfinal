@@ -259,7 +259,9 @@ public class file {
         return false;
     }
     //insert data at a specific line
-    public static String insertDataAtLine(String name, int lineNumber, String dataToInsert) {
+    //overloading
+
+    public static String appendFile(String name, int lineNumber, String dataToInsert) {
         try {
             File myObj = new File(name + ".txt");
 

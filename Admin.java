@@ -2,9 +2,6 @@ import java.util.*;
 abstract class AdminMethods{
 
     public abstract String setUsernameAndPass();
-    //public abstract void setPassword(String password);
-    public abstract String getUsername();
-    public abstract String getPassword();
     public abstract int incrementSpot();
     public abstract String addSpots();
     public abstract String viewTotalSpots();
